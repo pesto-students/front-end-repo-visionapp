@@ -18,10 +18,10 @@ function CreatePosts() {
   const [description, setDescription] = useState({
     postDescription: ""
   });
-  const [postData, setPostData] = useState("");
 
-  // const response = useSelector((state) => state.post.posts);
-  // console.log("#AllPost", response);
+  const { posts } = useSelector((state) => state.post);
+  // console.log("#AllPost", posts.data);
+  console.log("#AllPost", posts.data.allPostDetails);
 
   const handleSubmit = async (e) => {
     // e.preventDefault();
@@ -41,8 +41,9 @@ function CreatePosts() {
 
   useEffect(() => {
     dispatch(getAllPosts());
-    // setPostData(data);
   }, [])
+
+
   return (
     <>
       <Space direction="vertical" style={{ width: '100%' }} size={[0, 48]}>
@@ -121,19 +122,29 @@ function CreatePosts() {
 
                 {/* <WechatOutlined className="commentIcon" /> <span> 2 Comments</span> */}
                 {/* </div> */}
-                {/* </div> */}
-                <div className="viewPosts">
-                  <div className="postHeader" >
-                    <img src={process.env.PUBLIC_URL + '/profile.png'} alt='logo' width={25} />
-                    <h5> Yashkumar Jani</h5>
-                    <span> 1 day ago.</span>
-                    <div className="postContent">
+                {/* </div>  */}
+
+                {posts.data.allPostDetails && posts.data.allPostDetails.map((ele, index) => (
+                  <div className="viewPosts">
+                    <div className="postHeader" >
+                      <img src={process.env.PUBLIC_URL + '/profile.png'} alt='logo' width={25} />
+                      <h5> Yashkumar Jani</h5>
+                      <span> 1 day ago.</span>
+
                     </div>
-                    {/* {data.map((post, index) => (
-                      <p key={index}>{post.allPostDetails.postDescription}</p>
-                    ))} */}
+                    <div className="postContent">
+                      <p key={index} > {ele.postDescription} </p>
+                    </div>
+                    <div className="postFooter">
+                      {/* <HeartOutlined /> */}
+                      <HeartFilled className="likeIcon" /> <span> 10 Likes</span>
+
+                      <WechatOutlined className="commentIcon" /> <span> 2 Comments</span>
+                    </div>
                   </div>
-                </div>
+                ))}
+
+
               </div>
 
               <div className="rightPostsContentArea">
