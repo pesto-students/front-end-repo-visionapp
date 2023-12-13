@@ -1,5 +1,6 @@
 const postModel = require("../models/postModel")
 
+
 //get all posts
 exports.getAllPostsController = async (req, res) => {
     try {
@@ -22,8 +23,9 @@ exports.getAllPostsController = async (req, res) => {
 
 //create the post
 exports.createPostController = async (req, res) => {
+    console.log("#uploadImage", req.file);
     try {
-        const { postDescription } = req.body;
+        const { postDescription, postUploadImage } = req.body;
         // Validation --- if(!postDescription || !email)
         if (!postDescription) {
             return res.status(400).send({
@@ -32,7 +34,7 @@ exports.createPostController = async (req, res) => {
             })
         }
         // Save new user
-        const postDetail = new postModel({ postDescription });
+        const postDetail = new postModel({ postDescription, postUploadImage });
         await postDetail.save();
         return res.status(201).send({
             success: true,

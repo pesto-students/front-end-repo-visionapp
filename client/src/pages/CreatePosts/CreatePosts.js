@@ -15,33 +15,62 @@ function CreatePosts() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [description, setDescription] = useState({
-    postDescription: ""
-  });
+  const [postData, setPostData] = useState({
+    postDescription: "",
+    postUploadImage: ""
+  })
 
-  const { posts } = useSelector((state) => state.post);
-  // console.log("#AllPost", posts.data);
-  console.log("#AllPost", posts.data.allPostDetails);
+  const [getPostData, setGetPostData] = useState([]);
 
-  const handleSubmit = async (e) => {
-    // e.preventDefault();
-    // try {
-    //   console.log("#Creating Post.");
-    //   dispatch(createPost(description));
-    //   setDescription({
-    //     postDescription: ""
-    //   });
-    //   console.log("#Post Created.");
-    // }
-    // catch (error) {
-    //   console.warn("#CreatePost Error", error);
-    //   error(error);
-    // }
+  // const [description, setDescription] = useState({
+  //   postDescription: ""
+  // });
+  // const [postImage, setPostImage] = useState({
+  //   postUploadImage: ""
+  // });
+
+  // console.log("#Description : ", description);
+  // console.log("#PostImage : ", postImage);
+
+  const { data } = useSelector((state) => state.post.posts);
+  console.log("#AllPost", data);
+  // console.log("#AllPost", posts.data.allPostDetails);
+
+  // const handleSubmit = async (e) => {
+  //   // e.preventDefault();
+  //   try {
+  //     console.log("#Creating Post.");
+  //     dispatch(createPost(description));
+  //     setDescription({
+  //       postDescription: ""
+  //     });
+  //     console.log("#Post Created.");
+  //   }
+  //   catch (error) {
+  //     console.warn("#CreatePost Error", error);
+  //     error(error);
+  //   }
+  // }
+
+  const handleSubmit = (values) => {
+    setPostData({
+      postDescription: values.postText,
+      postUploadImage: values.postImg.file
+    })
+    // setDescription(values.postText);
+    // setPostImage(values.postImg.file);
+    // console.log("#setDescription", description);
+    // console.log("#setPostImage", postImage);
+    console.log("#######POST DATA", postData);
+    dispatch(createPost(postData));
   }
 
   useEffect(() => {
     dispatch(getAllPosts());
-  }, [])
+    setGetPostData(data);
+    console.log("getPostData : ", getPostData);
+
+  }, [dispatch, setGetPostData]);
 
 
   return (
@@ -55,6 +84,7 @@ function CreatePosts() {
               items={[
                 {
                   title: <HomeOutlined />,
+                  href: '/dashboard'
                 },
                 {
                   title: 'Create Posts',
@@ -84,21 +114,25 @@ function CreatePosts() {
                         ]}
                         hasFeedback>
                         <Input
-                          onChange={(e) => setDescription(e.target.value)}
-                          value={description}
+                          // onChange={(e) => setDescription(e.target.value)}
+                          // value={description}
                           className='formInput'
                           placeholder="What's happening?" />
                       </Form.Item>
                       <div className="postSection">
-                        <Upload
-                          action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
-                          listType="picture"
-                          maxCount={3}
-                          multiple
-                          className="postUpload"
-                        >
-                          <Button icon={<FileImageOutlined />}></Button>
-                        </Upload>
+                        <Form.Item name="postImg">
+                          <Upload
+                            action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
+                            listType="picture"
+                            maxCount={1}
+                            // onChange={(e) => setPostImage(e.target.files[0])}
+                            // value={postImage}
+                            multiple
+                            className="postUpload"
+                          >
+                            <Button icon={<FileImageOutlined />}></Button>
+                          </Upload>
+                        </Form.Item>
                         <Button className="postBtn" htmlType="submit"> Post </Button>
                       </div>
                     </Form>
@@ -124,13 +158,12 @@ function CreatePosts() {
                 {/* </div> */}
                 {/* </div>  */}
 
-                {posts.data.allPostDetails && posts.data.allPostDetails.map((ele, index) => (
+                {getPostData?.length && getPostData.map((ele, index) => (
                   <div className="viewPosts">
                     <div className="postHeader" >
                       <img src={process.env.PUBLIC_URL + '/profile.png'} alt='logo' width={25} />
                       <h5> Yashkumar Jani</h5>
                       <span> 1 day ago.</span>
-
                     </div>
                     <div className="postContent">
                       <p key={index} > {ele.postDescription} </p>

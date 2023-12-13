@@ -4,6 +4,10 @@ const postScheme = new mongoose.Schema({
     postDescription: {
         type: String,
         required: [true, 'Description is required.']
+    },
+    postUploadImage: {
+        type: String,
+        required: true
     }
 }, { timestamps: true });
 

@@ -21,6 +21,7 @@ function Dashboard() {
             <Flex gap="large" wrap="wrap" className='mainDashboardContentArea' justify={'center'}>
               <Card
                 hoverable
+                onClick={() => { navigate('/acceptApprovals'); }}
                 style={{
                   width: 250,
                 }}
@@ -32,6 +33,7 @@ function Dashboard() {
               </Card>
               <Card
                 hoverable
+                onClick={() => { navigate('/reviewTicket'); }}
                 style={{
                   width: 250,
                 }}
@@ -43,6 +45,7 @@ function Dashboard() {
               </Card>
               <Card
                 hoverable
+                onClick={() => { navigate('/fundMonitor'); }}
                 style={{
                   width: 250,
                 }}
@@ -66,6 +69,7 @@ function Dashboard() {
               </Card>
               <Card
                 hoverable
+                onClick={() => { navigate('/addProducts'); }}
                 style={{
                   width: 250,
                 }}
@@ -77,6 +81,7 @@ function Dashboard() {
               </Card>
               <Card
                 hoverable
+                onClick={() => { navigate('/addServiceProviders'); }}
                 style={{
                   width: 250,
                 }}

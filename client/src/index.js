@@ -14,9 +14,16 @@ import Dashboard from './pages/Dashboard/Dashboard';
 import Users from './pages/Users/Users';
 import ForgetPassword from './pages/ForgotPassword/ForgotPassword';
 import CreatePosts from './pages/CreatePosts/CreatePosts';
+import Approvals from './pages/AcceptApprovals/AcceptApprovals';
+import ReviewTicket from './pages/ReviewTicket/ReviewTicket';
+import FundMonitor from './pages/FundMonitor/FundMonitor';
+import AddProducts from './pages/AddProducts/AddProducts';
+import AddServiceProviders from './pages/AddServiceProviders/AddServiceProviders';
 
 import store from "./store/store";
 import { Provider } from "react-redux";
+import PageNotFound from './pages/PageNotFound/PageNotFound';
+
 
 const router = createBrowserRouter([
   {
@@ -42,6 +49,30 @@ const router = createBrowserRouter([
   {
     path: "/createPosts",
     element: <CreatePosts />,
+  },
+  {
+    path: "/acceptApprovals",
+    element: <Approvals />,
+  },
+  {
+    path: "/reviewTicket",
+    element: <ReviewTicket />,
+  },
+  {
+    path: "/fundMonitor",
+    element: <FundMonitor />,
+  },
+  {
+    path: "/addProducts",
+    element: <AddProducts />,
+  },
+  {
+    path: "/addServiceProviders",
+    element: <AddServiceProviders />,
+  },
+  {
+    path: "*",
+    element: <PageNotFound />,
   },
 ]);
 

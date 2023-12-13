@@ -19,11 +19,10 @@ export const getAllPosts = createAsyncThunk(
 export const createPost = createAsyncThunk(
   "createPost",
   async (data) => {
+    console.log("**************API O DATA**************", data);
     try {
-      const response = await axios.post("http://localhost:8080/api/v1/post/create-post", {
-        postDescription: data
-      });
-      console.log(response);
+      const response = await axios.post("http://localhost:8080/api/v1/post/create-post", data);
+      console.log("**************API I DATA**************", response);
       return response;
     } catch (error) {
       console.log(error);
@@ -41,17 +40,17 @@ export const postDetailsSlice = createSlice({
   reducers: {},
   extraReducers: builder => {
     builder
-      // .addCase(getAllPosts.pending, (state) => {
-      //   state.loading = true;
-      // })
+      .addCase(getAllPosts.pending, (state) => {
+        state.loading = true;
+      })
       .addCase(getAllPosts.fulfilled, (state, action) => {
         state.loading = false;
         state.posts = action.payload;
       })
-    // .addCase(getAllPosts.rejected, (state, action) => {
-    //   state.loading = false;
-    //   state.error = action.payload;
-    // })
+      .addCase(getAllPosts.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
     // .addCase(createPost.pending, (state) => {
     //   state.loading = true;
     // })
