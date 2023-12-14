@@ -27,10 +27,13 @@ $layoutOrangeColor : #FF5300;
         }
 
         .addProductsContainer {
-            background-color: #ff550078;
+            // background-color: rgb(239 225 199);
+            background-color: white;
             border-radius: 5px;
-            padding: 5px;
-            border: 1px solid #ff550058;
+            // padding: 5px;
+            padding: 10px;
+            // border: 3px solid white;
+            box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
 
             .addProductsFormArea {
                 display: flex;

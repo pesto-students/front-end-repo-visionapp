@@ -44,7 +44,10 @@ function AddProducts() {
   }, []);
 
   //modified Data with Key in Table
-  // const modifiedData = gridData.map()
+  const modifiedData = gridData.map(({ ...item }) => ({
+    ...item,
+    key: item.id
+  }));
 
   //Define columns for Table
   const columns = [{
@@ -81,18 +84,18 @@ function AddProducts() {
     fixed: 'top',
     render: (_, record) => {
       const editable = isEditing(record);
-      return gridData.length >= 1 ? (
+      return modifiedData.length >= 1 ? (
         <Space>
           <Popconfirm
             title="Are you sure want to delete?"
-            onConfirm={() => handleDelete(record)} disabled={editable} >
-            <Button danger icon={<DeleteOutlined />}></Button>
+            onConfirm={() => handleDelete(record)}>
+            <Button danger icon={<DeleteOutlined />} disabled={editable}></Button>
           </Popconfirm>
           {editable ? (
             <span>
               <Space>
-                <Button ghost type="primary" onClick={() => saveEdit(record.key)} style={{ marginRight: 2 }} > Save</Button>
-                <Popconfirm title="Are you sure want to Cancel?" onConfirm={cancelEdit}>
+                <Button type="primary" onClick={() => saveEdit(record.key)} style={{ marginRight: 2 }} > Save</Button>
+                <Popconfirm title="Are you sure want to Cancel?" onConfirm={() => cancelEdit()}>
                   <Button danger>Cancel</Button>
                 </Popconfirm>
               </Space>
@@ -110,7 +113,7 @@ function AddProducts() {
 
   //Delete Function
   const handleDelete = (value) => {
-    const dataSource = [...gridData];
+    const dataSource = [...modifiedData];
     const filteredData = dataSource.filter((item) => item.id !== value.id);
     setGridData(filteredData);
   };
@@ -121,11 +124,31 @@ function AddProducts() {
     return record.key === editRowKey;
   }
   const cancelEdit = () => {
-
+    setEditRowKey('');
   }
-  const saveEdit = () => {
+  const saveEdit = async (key) => {
+    try {
+      const row = await form.validateFields();
+      const newData = [...modifiedData];
+      const index = newData.findIndex((item) => key === item.key);
+      if (index > -1) {
+        const item = newData[index];
+        newData.splice(index, 1, {
+          ...item,
+          ...row,
+        });
+        setGridData(newData);
+        setEditRowKey('');
+      } else {
+        newData.push(row);
+        setGridData(newData);
+        setEditRowKey('');
+      }
+    } catch (errInfo) {
+      console.log('Validate Failed:', errInfo);
+    }
+  };
 
-  }
   const doEdit = (record) => {
     form.setFieldsValue({
       name: "",
@@ -138,6 +161,41 @@ function AddProducts() {
 
   //Editing Data in Form
   const [form] = Form.useForm();
+
+  //Edit data on input field of Form
+  const mergeColumns = columns.map((col) => {
+    if (!col.editTable) {
+      return col;
+    }
+    return {
+      ...col,
+      onCell: record => ({
+        record,
+        // inputType: col.dataIndex,
+        dataIndex: col.dataIndex,
+        title: col.title,
+        editing: isEditing(record)
+      })
+    }
+  });
+
+  //Visible Editable cell
+  // const EditableCell = ({ editing, dataIndex, title, inputType, record, children, ...restProps }) => {
+  const EditableCell = ({ editing, dataIndex, title, record, children, ...restProps }) => {
+    const input = <Input />;
+    return (
+      <td {...restProps}>
+        {editing ? (
+          <Form.item name={dataIndex} style={{ margin: 0 }} rules={[{
+            required: true,
+            message: `Please enter some value in ${title} field`
+          }]}>
+            {input}
+          </Form.item>
+        ) : (children)}
+      </td>
+    )
+  };
 
   return (
     <>
@@ -207,21 +265,6 @@ function AddProducts() {
                       </Upload>
                     </Form.Item>
 
-                    {/* <Form.Item className='formUpload' valuePropName="fileList">
-                      <Upload htmltype="file"
-                        // fileList={profileImg}
-                        // onChange={(e) => setProfileImg(e.target.files[0])}
-                        // value={profileImg}
-                        // name={profileImg}
-                        action="/upload.do"
-                        listType="picture-card">
-                        <div>
-                          <CloudUploadOutlined />
-                          <div style={{ marginTop: 8 }}>Upload</div>
-                        </div>
-                      </Upload>
-                    </Form.Item> */}
-
                     <Form.Item>
                       <Button className='formButton' htmlType="submit">Add Products</Button>
                     </Form.Item>
@@ -232,8 +275,14 @@ function AddProducts() {
               <div className="listOfProductsContainer">
                 <Form form={form} component={false}>
                   <Table
-                    columns={columns}
-                    dataSource={gridData}
+                    // columns={columns}
+                    columns={mergeColumns}
+                    // components={{
+                    //   body: {
+                    //     cell: EditableCell,
+                    //   },
+                    // }}
+                    dataSource={modifiedData}
                     bordered
                     loading={loading}
                     scroll={{
