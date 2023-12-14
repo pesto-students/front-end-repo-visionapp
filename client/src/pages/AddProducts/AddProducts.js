@@ -1,53 +1,81 @@
+import { useEffect, useState } from "react";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import {
-  Layout, Space, Flex, Card, Breadcrumb, Form, Input, Upload,
-  Button, Select, Table, Popconfirm
-} from 'antd';
-import {
-  HomeOutlined, BookOutlined, LockOutlined, CloudUploadOutlined, FileImageOutlined,
-  DeleteOutlined, EditOutlined
-} from '@ant-design/icons';
+import { Layout, Space, Flex, Card, Breadcrumb, Form, Input, Upload, Button, Select, Table, Popconfirm } from 'antd';
+import { HomeOutlined, BookOutlined, LockOutlined, CloudUploadOutlined, FileImageOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import LHeader from '../../components/Header/LHeader';
-import './AddProducts.scss';
 import LFooter from '../../components/Footer/LFooter';
 import FormItemInput from "antd/es/form/FormItemInput";
-import axios from "axios";
-import { useEffect, useState } from "react";
+import './AddProducts.scss';
+
 
 const { Header, Content, Footer } = Layout;
 const { Meta } = Card;
 const { Option } = Select;
 
+const EditableCell = ({ editing, dataIndex, title, record, children, ...restProps }) => {
+  const input = <Input />;
+  return (
+    <td {...restProps}>
+      {editing ? (
+        <Form.item name={dataIndex} style={{ margin: 0 }} rules={[{
+          required: true,
+          message: `Please enter some value in ${title} field`
+        }]}>
+          {input}
+        </Form.item>
+      ) : (children)}
+    </td>
+  )
+};
+
 function AddProducts() {
   const navigate = useNavigate();
 
-  //value is coming in console but...
-  const handleSubmit = async (values) => {
-    console.log({ values });
-  }
+  //Editing Data in Form
+  const [form] = Form.useForm();
 
   //Table code.
   const [gridData, setGridData] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  //Load data in Table
-  const loadDataInTable = async () => {
-    setLoading(true);
-    const response = await axios.get("https://jsonplaceholder.typicode.com/comments");
-    setGridData(response.data);
-    setLoading(false);
+  //Editing Function
+  const [editRowKey, setEditRowKey] = useState("");
+  const isEditing = (record) => record.key === editRowKey;
+  const cancelEdit = () => {
+    setEditRowKey('');
   }
-
-  //useEffect to append data in State.
-  useEffect(() => {
-    loadDataInTable();
-  }, []);
-
-  //modified Data with Key in Table
-  const modifiedData = gridData.map(({ ...item }) => ({
-    ...item,
-    key: item.id
-  }));
+  const saveEdit = async (key) => {
+    try {
+      const row = await form.validateFields();
+      const newData = [...modifiedData];
+      const index = newData.findIndex((item) => key === item.key);
+      if (index > -1) {
+        const item = newData[index];
+        newData.splice(index, 1, {
+          ...item,
+          ...row,
+        });
+        setGridData(newData);
+        setEditRowKey('');
+      } else {
+        newData.push(row);
+        setGridData(newData);
+        setEditRowKey('');
+      }
+    } catch (errInfo) {
+      console.log('Validate Failed:', errInfo);
+    }
+  };
+  const doEdit = (record) => {
+    form.setFieldsValue({
+      name: "",
+      email: "",
+      body: "",
+      ...record,
+    });
+    setEditRowKey(record.key);
+  }
 
   //Define columns for Table
   const columns = [{
@@ -111,56 +139,31 @@ function AddProducts() {
     }
   }];
 
+  //Load data in Table
+  const loadDataInTable = async () => {
+    setLoading(true);
+    const response = await axios.get("https://jsonplaceholder.typicode.com/comments");
+    setGridData(response.data);
+    setLoading(false);
+  }
+
+  //useEffect to append data in State.
+  useEffect(() => {
+    loadDataInTable();
+  }, []);
+
+  //modified Data with Key in Table
+  const modifiedData = gridData.map(({ ...item }) => ({
+    ...item,
+    key: item.id
+  }));
+
   //Delete Function
   const handleDelete = (value) => {
     const dataSource = [...modifiedData];
     const filteredData = dataSource.filter((item) => item.id !== value.id);
     setGridData(filteredData);
   };
-
-  //Editing Function
-  const [editRowKey, setEditRowKey] = useState("");
-  const isEditing = (record) => {
-    return record.key === editRowKey;
-  }
-  const cancelEdit = () => {
-    setEditRowKey('');
-  }
-  const saveEdit = async (key) => {
-    try {
-      const row = await form.validateFields();
-      const newData = [...modifiedData];
-      const index = newData.findIndex((item) => key === item.key);
-      if (index > -1) {
-        const item = newData[index];
-        newData.splice(index, 1, {
-          ...item,
-          ...row,
-        });
-        setGridData(newData);
-        setEditRowKey('');
-      } else {
-        newData.push(row);
-        setGridData(newData);
-        setEditRowKey('');
-      }
-    } catch (errInfo) {
-      console.log('Validate Failed:', errInfo);
-    }
-  };
-
-  const doEdit = (record) => {
-    form.setFieldsValue({
-      name: "",
-      email: "",
-      body: "",
-      ...record
-    });
-    setEditRowKey(record.key);
-  }
-
-  //Editing Data in Form
-  const [form] = Form.useForm();
 
   //Edit data on input field of Form
   const mergeColumns = columns.map((col) => {
@@ -179,23 +182,10 @@ function AddProducts() {
     }
   });
 
-  //Visible Editable cell
-  // const EditableCell = ({ editing, dataIndex, title, inputType, record, children, ...restProps }) => {
-  const EditableCell = ({ editing, dataIndex, title, record, children, ...restProps }) => {
-    const input = <Input />;
-    return (
-      <td {...restProps}>
-        {editing ? (
-          <Form.item name={dataIndex} style={{ margin: 0 }} rules={[{
-            required: true,
-            message: `Please enter some value in ${title} field`
-          }]}>
-            {input}
-          </Form.item>
-        ) : (children)}
-      </td>
-    )
-  };
+  //value is coming in console but...
+  const handleSubmit = async (values) => {
+    console.log({ values });
+  }
 
   return (
     <>
@@ -277,11 +267,11 @@ function AddProducts() {
                   <Table
                     // columns={columns}
                     columns={mergeColumns}
-                    // components={{
-                    //   body: {
-                    //     cell: EditableCell,
-                    //   },
-                    // }}
+                    components={{
+                      body: {
+                        cell: EditableCell,
+                      },
+                    }}
                     dataSource={modifiedData}
                     bordered
                     loading={loading}
