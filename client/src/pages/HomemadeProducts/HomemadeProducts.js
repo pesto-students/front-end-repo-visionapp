@@ -22,7 +22,7 @@ function HomemadeProducts() {
               items={[
                 {
                   title: <HomeOutlined />,
-                  href: '/dashboard'
+                  href: '/dashboardUser'
                 },
                 {
                   title: 'Homemade Products',

@@ -27,6 +27,7 @@ import AddFunds from './pages/AddFunds/AddFunds';
 import RaiseTicket from './pages/RaiseTicket/RaiseTicket';
 import HomemadeProducts from './pages/HomemadeProducts/HomemadeProducts';
 import ServiceProviders from './pages/ServiceProviders/ServiceProviders';
+import DashboardUser from './pages/DashboardUser/DashboardUser';
 
 
 const router = createBrowserRouter([
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
   {
     path: "/dashboard",
     element: <Dashboard />,
+  },
+  {
+    path: "/dashboardUser",
+    element: <DashboardUser />,
   },
   {
     path: "/forgotPassword",

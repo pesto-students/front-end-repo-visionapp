@@ -24,7 +24,7 @@ function ServiceProviders() {
               items={[
                 {
                   title: <HomeOutlined />,
-                  href: '/dashboard'
+                  href: '/dashboardUser'
                 },
                 {
                   title: 'Service Providers',
