@@ -23,6 +23,10 @@ import AddServiceProviders from './pages/AddServiceProviders/AddServiceProviders
 import store from "./store/store";
 import { Provider } from "react-redux";
 import PageNotFound from './pages/PageNotFound/PageNotFound';
+import AddFunds from './pages/AddFunds/AddFunds';
+import RaiseTicket from './pages/RaiseTicket/RaiseTicket';
+import HomemadeProducts from './pages/HomemadeProducts/HomemadeProducts';
+import ServiceProviders from './pages/ServiceProviders/ServiceProviders';
 
 
 const router = createBrowserRouter([
@@ -69,6 +73,22 @@ const router = createBrowserRouter([
   {
     path: "/addServiceProviders",
     element: <AddServiceProviders />,
+  },
+  {
+    path: "/addFunds",
+    element: <AddFunds />,
+  },
+  {
+    path: "/raiseTicket",
+    element: <RaiseTicket />,
+  },
+  {
+    path: "/homemadeProducts",
+    element: <HomemadeProducts />,
+  },
+  {
+    path: "/serviceProviders",
+    element: <ServiceProviders />,
   },
   {
     path: "*",

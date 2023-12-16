@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { Layout, Space, Flex, Card, Breadcrumb, Form, Input, Upload, Button, Select, Table, Popconfirm } from 'antd';
+import dayjs from 'dayjs';
+import { Layout, Space, Flex, Card, Breadcrumb, Form, Input, Upload, Button, Select, Table, Popconfirm, DatePicker } from 'antd';
 import { HomeOutlined, BookOutlined, LockOutlined, CloudUploadOutlined, FileImageOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import LHeader from '../../components/Header/LHeader';
 import LFooter from '../../components/Footer/LFooter';
 import FormItemInput from "antd/es/form/FormItemInput";
-import './AddProducts.scss';
+import './AddFunds.scss';
 
 
 const { Header, Content, Footer } = Layout;
@@ -29,7 +30,7 @@ const EditableCell = ({ editing, dataIndex, title, record, children, ...restProp
   )
 };
 
-function AddProducts() {
+function AddFunds() {
   const navigate = useNavigate();
 
   //Editing Data in Form
@@ -193,7 +194,7 @@ function AddProducts() {
       <Space direction="vertical" style={{ width: '100%' }} size={[0, 48]}>
         <Layout className='mainLayout'>
           <LHeader />
-          <Content className='addProducts' style={{ overflowY: "scroll" }}>
+          <Content className='addFunds' style={{ overflowY: "scroll" }}>
             <Breadcrumb
               className="breadcrumBg"
               items={[
@@ -202,45 +203,59 @@ function AddProducts() {
                   href: '/dashboard'
                 },
                 {
-                  title: 'Add Products',
+                  title: 'Add Funds',
                 },
               ]}
             />
-            <div className='mainAddProductsContentArea'>
-              <h2> Add Products</h2>
-              <div className="addProductsContainer">
+            <div className='mainAddFundsContentArea'>
+              <h2> Add Funds</h2>
+              <div className="addFundsContainer">
                 <Form onFinish={handleSubmit} autoComplete="off">
 
-                  <Flex gap="small" className='addProductsFormArea' justify={'center'} align={'center'} vertical>
-                    <Form.Item name="productName">
+                  <Flex gap="small" className='addFundsFormArea' justify={'center'} align={'center'} vertical>
+                    <Form.Item name="fundAmount">
                       <Input
                         className='formInput'
-                        placeholder="Enter Product Name"
-                        prefix={<BookOutlined />} />
-                    </Form.Item>
-
-                    <Form.Item name="productPrice">
-                      <Input
-                        className='formInput'
-                        placeholder="Enter Product Price"
+                        placeholder="Enter Fund Amount"
                         prefix={<b>&#8377;</b>} />
                     </Form.Item>
 
                     <Form.Item
-                      name="productType"
+                      name="fundType"
                     >
-                      <Select className='formInput' placeholder="select Product Type">
-                        <Option value="woodwork">Woodwork</Option>
-                        <Option value="pottery">Pottery</Option>
-                        <Option value="leather">Leather</Option>
-                        <Option value="jute">Jute</Option>
-                        <Option value="shell">Shell</Option>
-                        <Option value="phulkaris">Phulkaris</Option>
-                        <Option value="zardozi">Zardozi</Option>
+                      <Select className='formInput' placeholder="select Fund Type">
+                        <Option value="cash">Cash</Option>
+                        <Option value="netBanking">Net Banking</Option>
+                        <Option value="gPay">Gpay</Option>
+                        <Option value="phonePay">Phone pay</Option>
+                        <Option value="payTm">Paytm</Option>
+                        <Option value="other">Other</Option>
                       </Select>
                     </Form.Item>
 
-                    <Form.Item name="poductImage">
+
+                    <Form.Item name="dateOfPayment">
+                      <DatePicker
+                        picker="date"
+                        className='formDate'
+                        // onChange={(e) => setDob(e.target.value)}
+                        defaultValue={dayjs('01/01/2023', 'DD/MM/YYYY')} format={"DD/MM/YYYY"}
+                      // onChange={(date, dateString) => {
+                      //   console.log(dateString); setDob(date, dateString);
+                      // }}
+                      // value={dob}
+                      // name={dob} 
+                      />
+                    </Form.Item>
+
+                    <Form.Item name="fundDescription">
+                      <Input
+                        className='formInput'
+                        placeholder="Enter Fund description"
+                        prefix={<BookOutlined />} />
+                    </Form.Item>
+
+                    <Form.Item name="fundProofImage">
                       <Upload
                         action="/upload.do"
                         listType="picture"
@@ -251,19 +266,19 @@ function AddProducts() {
                         className="formUpload"
                       >
                         <div>
-                          <Button icon={<FileImageOutlined />} style={{ fontWeight: "lighter" }}> Upload Product Image</Button>
+                          <Button icon={<FileImageOutlined />} style={{ fontWeight: "lighter" }}> Upload Fund Image</Button>
                         </div>
                       </Upload>
                     </Form.Item>
 
                     <Form.Item>
-                      <Button className='formButton' htmlType="submit">Add Products</Button>
+                      <Button className='formButton' htmlType="submit">Add Funds</Button>
                     </Form.Item>
                   </Flex>
                 </Form>
               </div>
               <h2> List of Products</h2>
-              <div className="listOfProductsContainer">
+              <div className="listOfAddFundsContainer">
                 <Form form={form} component={false}>
                   <Table
                     // columns={columns}
@@ -291,4 +306,4 @@ function AddProducts() {
   );
 }
 
-export default AddProducts;
+export default AddFunds;
