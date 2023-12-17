@@ -30,7 +30,10 @@ function FundMonitor() {
               ]}
             />
             <div className='mainFundMonitorContentArea'>
-              <h2> Funds Monitoring Chart</h2>
+              <div className="fundMonitorHeader">
+                <h2> Funds Monitoring Chart</h2>
+                <Button type="primary" onClick={() => { navigate('/addFunds'); }}> ADD FUNDS</Button>
+              </div>
               <div className="fundMonitorContainer">
                 <img src={process.env.PUBLIC_URL + '/underConstruction.png'} alt='logo' />
               </div>

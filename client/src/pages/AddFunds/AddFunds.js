@@ -203,6 +203,10 @@ function AddFunds() {
                   href: '/dashboard'
                 },
                 {
+                  title: 'Funds Monitor',
+                  href: '/fundMonitor'
+                },
+                {
                   title: 'Add Funds',
                 },
               ]}

@@ -21,10 +21,18 @@ $layoutOrangeColor : #FF5300;
 
     .mainFundMonitorContentArea {
 
-        h2 {
-            margin-bottom: 0.5rem;
-            margin-top: 0rem;
+        .fundMonitorHeader {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            h2 {
+                margin-bottom: 1rem;
+                margin-top: 0.5rem;
+            }
         }
+
+
 
         .fundMonitorContainer {
             display: flex;
