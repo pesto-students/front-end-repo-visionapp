@@ -15,25 +15,13 @@ function CreatePosts() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [postData, setPostData] = useState({
-    postDescription: "",
-    postUploadImage: ""
-  })
+  const [postDescription, setPostDescription] = useState(null);
+  const [postUploadImage, setPostUploadImage] = useState("");
 
-  const [getPostData, setGetPostData] = useState([]);
+  // const [getPostData, setGetPostData] = useState([]);
 
-  // const [description, setDescription] = useState({
-  //   postDescription: ""
-  // });
-  // const [postImage, setPostImage] = useState({
-  //   postUploadImage: ""
-  // });
-
-  // console.log("#Description : ", description);
-  // console.log("#PostImage : ", postImage);
-
-  const { data } = useSelector((state) => state.post.posts);
-  console.log("#AllPost", data);
+  // const { data } = useSelector((state) => state.post.posts);
+  // console.log("#AllPost", data);
   // console.log("#AllPost", posts.data.allPostDetails);
 
   // const handleSubmit = async (e) => {
@@ -53,24 +41,25 @@ function CreatePosts() {
   // }
 
   const handleSubmit = (values) => {
-    setPostData({
-      postDescription: values.postText,
-      postUploadImage: values.postImg.file
-    })
-    // setDescription(values.postText);
-    // setPostImage(values.postImg.file);
-    // console.log("#setDescription", description);
-    // console.log("#setPostImage", postImage);
-    console.log("#######POST DATA", postData);
-    dispatch(createPost(postData));
+    console.log("Post Values :", values.postText + " and " + values.postImg.fileList[0]);
+
+    setPostDescription(values.postText);
+    setPostUploadImage(values.postImg.fileList[0]);
+    console.log("#setPostDescription", postDescription);
+    console.log("#setPostUploadImage", postUploadImage);
+
+    const formData = new FormData();
+    formData.append('postDescription', postDescription);
+    formData.append('postUploadImage', postUploadImage);
+    dispatch(createPost(formData));
   }
 
-  useEffect(() => {
-    dispatch(getAllPosts());
-    setGetPostData(data);
-    console.log("getPostData : ", getPostData);
+  // useEffect(() => {
+  //   dispatch(getAllPosts());
+  //   // setGetPostData(data);
+  //   // console.log("getPostData : ", getPostData);
 
-  }, [dispatch, setGetPostData]);
+  // }, [dispatch, setGetPostData]);
 
 
   return (
@@ -158,24 +147,24 @@ function CreatePosts() {
                 {/* </div> */}
                 {/* </div>  */}
 
-                {getPostData?.length && getPostData.map((ele, index) => (
-                  <div className="viewPosts">
-                    <div className="postHeader" >
-                      <img src={process.env.PUBLIC_URL + '/profile.png'} alt='logo' width={25} />
-                      <h5> Yashkumar Jani</h5>
-                      <span> 1 day ago.</span>
-                    </div>
-                    <div className="postContent">
-                      <p key={index} > {ele.postDescription} </p>
-                    </div>
-                    <div className="postFooter">
-                      {/* <HeartOutlined /> */}
-                      <HeartFilled className="likeIcon" /> <span> 10 Likes</span>
-
-                      <WechatOutlined className="commentIcon" /> <span> 2 Comments</span>
-                    </div>
+                {/* {getPostData?.length && getPostData.map((ele, index) => ( */}
+                <div className="viewPosts">
+                  <div className="postHeader" >
+                    <img src={process.env.PUBLIC_URL + '/profile.png'} alt='logo' width={25} />
+                    <h5> Yashkumar Jani</h5>
+                    <span> 1 day ago.</span>
                   </div>
-                ))}
+                  <div className="postContent">
+                    {/* <p key={index} > {ele.postDescription} </p> */}
+                  </div>
+                  <div className="postFooter">
+                    {/* <HeartOutlined /> */}
+                    <HeartFilled className="likeIcon" /> <span> 10 Likes</span>
+
+                    <WechatOutlined className="commentIcon" /> <span> 2 Comments</span>
+                  </div>
+                </div>
+                {/* ))} */}
 
 
               </div>

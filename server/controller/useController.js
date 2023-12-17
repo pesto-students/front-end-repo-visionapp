@@ -23,9 +23,14 @@ exports.getAllPostsController = async (req, res) => {
 
 //create the post
 exports.createPostController = async (req, res) => {
-    console.log("#uploadImage", req.file);
+
+    console.log("#Name", req.body.postDescription);
+    console.log("#File", req);
+    // console.log("#File", req.file.path);
     try {
-        const { postDescription, postUploadImage } = req.body;
+        const postDescription = req.body.postDescription;
+        const postUploadImage = req.body.postUploadImage;
+
         // Validation --- if(!postDescription || !email)
         if (!postDescription) {
             return res.status(400).send({

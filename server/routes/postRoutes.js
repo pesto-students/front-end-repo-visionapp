@@ -4,9 +4,10 @@ const { getAllPostsController,
     updatePostController,
     getSinglePostByIDController,
     deletePostByIDController } = require("../controller/useController");
-const multer = require("multer");
+const multer = require('multer')
+// const upload = multer({ dest: 'uploads/' })
 
-//Image storage path
+// Image storage path
 const imgConfig = multer.diskStorage({
     destination: (req, file, callback) => {
         callback(null, "./uploads")
@@ -15,18 +16,18 @@ const imgConfig = multer.diskStorage({
         callback(null, `image-${Date.now()}.${file.originalname}`)
     }
 });
-//Image filter
-const isImage = (req, file, callback) => {
-    if (file.mimetype.startsWith("image")) {
-        callback(null, true)
-    } else {
-        callback(new Error("Only image is allow."));
-    }
-}
-//Set Above 2 Functions in Below One.
+// Image filter
+// const isImage = (req, file, callback) => {
+//     if (file.mimetype.startsWith("image")) {
+//         return callback(null, true)
+//     } else {
+//         return callback(new Error("Only image is allow."));
+//     }
+// }
+// Set Above 2 Functions in Below One.
 const upload = multer({
     storage: imgConfig,
-    fileFilter: isImage
+    // fileFilter: isImage
 })
 
 //router object
@@ -36,7 +37,7 @@ const router = express.Router();
 router.get('/all-posts', getAllPostsController)
 
 //post method || POST
-router.post('/create-post', upload.single("photo"), createPostController)
+router.post('/create-post', upload.single("postUploadImage"), createPostController)
 
 //update method || PUT
 router.put('/update-post/:id', updatePostController)

@@ -12,11 +12,18 @@ const cors = require("cors");
 const morgan = require("morgan");
 const colors = require("colors");
 const connectDB = require("./config/db");
+const bodyParser = require('body-parser');
 
 //middlewares
 app.use(cors());
-app.use(express.json());
+// app.use(express.json());
 app.use(morgan('dev'));
+//Image upload
+app.use('/uploads', express.static('uploads'))
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }))
+// parse application/json
+app.use(bodyParser.json())
 
 
 //router imports

@@ -18,10 +18,10 @@ export const getAllPosts = createAsyncThunk(
 //create action
 export const createPost = createAsyncThunk(
   "createPost",
-  async (data) => {
-    console.log("**************API O DATA**************", data);
+  async (formData) => {
+    console.log("**************API O DATA**************", formData);
     try {
-      const response = await axios.post("http://localhost:8080/api/v1/post/create-post", data);
+      const response = await axios.post("http://localhost:8080/api/v1/post/create-post", formData);
       console.log("**************API I DATA**************", response);
       return response;
     } catch (error) {
