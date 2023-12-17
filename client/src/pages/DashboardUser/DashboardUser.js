@@ -21,7 +21,7 @@ function DashboardUser() {
             <Flex gap="large" wrap="wrap" className='mainDashboardContentArea' justify={'center'}>
               <Card
                 hoverable
-                onClick={() => { navigate('/reviewTicket'); }}
+                onClick={() => { navigate('/raiseTicket'); }}
                 style={{
                   width: 250,
                 }}
