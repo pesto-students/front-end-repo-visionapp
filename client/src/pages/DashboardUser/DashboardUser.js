@@ -45,7 +45,7 @@ function DashboardUser() {
               </Card>
               <Card
                 hoverable
-                onClick={() => { navigate('/createPosts'); }}
+                onClick={() => { navigate('/viewPosts'); }}
                 style={{
                   width: 250,
                 }}

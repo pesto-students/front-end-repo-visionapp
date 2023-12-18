@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { Layout, Space, Flex, Card, Breadcrumb, Form, Input, Upload, Button, Spin } from 'antd';
 import { HomeOutlined, UserOutlined, FileImageOutlined, HeartOutlined, HeartFilled, WechatOutlined } from '@ant-design/icons';
 import LHeader from '../../components/Header/LHeader';
-import './CreatePosts.scss';
+import './ViewPosts.scss';
 import LFooter from '../../components/Footer/LFooter';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from "react";
@@ -11,7 +11,7 @@ import { createPost, getAllPosts } from "../../features/postDetailsSlice";
 const { Header, Content, Footer } = Layout;
 const { Meta } = Card;
 
-function CreatePosts() {
+function ViewPosts() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -72,18 +72,18 @@ function CreatePosts() {
               items={[
                 {
                   title: <HomeOutlined />,
-                  href: '/dashboard'
+                  href: '/dashboardUser'
                 },
                 {
-                  title: 'Create Posts',
+                  title: 'View Posts',
                 },
               ]}
             />
             <div className='mainPostsContentArea'>
 
               <div className="leftPostsContentArea">
-                <h2> Posts</h2>
-                <div className="postsForm" style={{ background: "White" }}>
+                <h2> View Posts</h2>
+                {/* <div className="postsForm" style={{ background: "White" }}>
                   <div className="imgOfAdmin" >
                     <img src={process.env.PUBLIC_URL + '/profile.png'} alt='logo' width={50} />
                   </div>
@@ -127,24 +127,7 @@ function CreatePosts() {
 
 
                   </div>
-                </div>
-                {/* <div className="viewPosts">
-                  <div className="postHeader" >
-                    <img src={process.env.PUBLIC_URL + '/profile.png'} alt='logo' width={25} />
-                    <h5> Yashkumar Jani</h5>
-                    <span> 1 day ago.</span>
-                  </div>
-                  <div className="postContent">
-                    <p>Hello colony members, Now we will start work to build our colony gate.</p>
-                    <img src={"https://5.imimg.com/data5/ANDROID/Default/2022/12/SR/OL/XK/48484822/product-jpeg-1000x1000.jpg"} alt='logo' />
-                  </div>
-                  <div className="postFooter">
-                    {/* <HeartOutlined /> */}
-                {/* <HeartFilled className="likeIcon" /> <span> 10 Likes</span> */}
-
-                {/* <WechatOutlined className="commentIcon" /> <span> 2 Comments</span> */}
-                {/* </div> */}
-                {/* </div>  */}
+                </div> */}
 
                 {
                   loading ?
@@ -232,4 +215,4 @@ function CreatePosts() {
   );
 }
 
-export default CreatePosts;
+export default ViewPosts;
