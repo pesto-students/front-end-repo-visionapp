@@ -38,30 +38,30 @@ export const postDetailsSlice = createSlice({
     error: null,
   },
   reducers: {},
-  extraReducers: builder => {
-    builder
-      .addCase(getAllPosts.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(getAllPosts.fulfilled, (state, action) => {
-        state.loading = false;
-        state.posts = action.payload;
-      })
-      .addCase(getAllPosts.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
-    // .addCase(createPost.pending, (state) => {
-    //   state.loading = true;
-    // })
-    // .addCase(createPost.fulfilled, (state, action) => {
-    //   state.loading = false;
-    //   state.posts = action.payload;
-    // })
-    // .addCase(createPost.rejected, (state, action) => {
-    //   state.loading = false;
-    //   state.error = action.payload;
-    // })
+  extraReducers: (builder) => {
+
+    builder.addCase(getAllPosts.pending, (state) => {
+      state.loading = true;
+    })
+    builder.addCase(getAllPosts.fulfilled, (state, action) => {
+      state.loading = false;
+      state.posts = action.payload;
+    })
+    builder.addCase(getAllPosts.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    })
+    builder.addCase(createPost.pending, (state) => {
+      state.loading = true;
+    })
+    builder.addCase(createPost.fulfilled, (state, action) => {
+      state.loading = false;
+      state.posts = action.payload;
+    })
+    builder.addCase(createPost.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.error.message;
+    })
   }
 
 });

@@ -7,7 +7,7 @@ const postScheme = new mongoose.Schema({
     },
     postUploadImage: {
         type: String,
-        required: true
+        // required: true
     }
 }, { timestamps: true });
 

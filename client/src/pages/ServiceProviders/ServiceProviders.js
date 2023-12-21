@@ -164,7 +164,7 @@ function ServiceProviders() {
                         <hr />
                         <Row gutter={12}>
                           <Col span={24} >
-                            <div style={{ display: "flex", alignItems: "center" }}>
+                            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-around" }}>
                               <div className="profileName" style={{ textAlign: 'center' }}>
                                 <img
                                   alt="example"

@@ -18,25 +18,8 @@ function CreatePosts() {
   const [postDescription, setPostDescription] = useState(null);
   const [postUploadImage, setPostUploadImage] = useState("");
 
-  const { posts, loading } = useSelector((state) => state.post);
-  console.log("#AllPost", posts?.data?.allPostDetails[0]?.postDescription);
-  // console.log("#AllPost", data.allPostDetails);
-
-  // const handleSubmit = async (e) => {
-  //   // e.preventDefault();
-  //   try {
-  //     console.log("#Creating Post.");
-  //     dispatch(createPost(description));
-  //     setDescription({
-  //       postDescription: ""
-  //     });
-  //     console.log("#Post Created.");
-  //   }
-  //   catch (error) {
-  //     console.warn("#CreatePost Error", error);
-  //     error(error);
-  //   }
-  // }
+  const postData = useSelector((state) => state.post);
+  console.log("#PostData", postData);
 
   const handleSubmit = (values) => {
     console.log("Post Values :", values.postText + " and " + values.postImg.fileList[0]);
@@ -55,11 +38,6 @@ function CreatePosts() {
   useEffect(() => {
     dispatch(getAllPosts());
   }, [dispatch]);
-
-  if (loading) {
-    return <Flex align="center" gap="middle" justify="center" style={{ height: '100vh' }}><Spin size="large" /></Flex>;
-  }
-
 
   return (
     <>
@@ -128,48 +106,51 @@ function CreatePosts() {
 
                   </div>
                 </div>
-                {/* <div className="viewPosts">
+
+                {/* {posts?.data?.allPostDetails[0] ?
+                  posts?.data?.allPostDetails.map((ele, index) => ( */}
+                {postData.loading && <div>Loading </div>}
+                {!postData.loading && postData.error ? <div>Error : {postData.error} </div> : null}
+                {!postData.loading && postData.posts ? (
+                  <>
+                    {
+                      postData?.posts?.data?.allPostDetails.map((el, index) => (
+                        <div className="viewPosts">
+                          <div className="postHeader" >
+                            <img src={process.env.PUBLIC_URL + '/profile.png'} alt='logo' width={25} />
+                            <h5> Yashkumar Jani</h5>
+                            <span> 1 day ago.</span>
+                          </div>
+                          <div className="postContent">
+                            <p key={index} > {el.postDescription} </p>
+                          </div>
+                          <div className="postFooter">
+                            {/* <HeartOutlined /> */}
+                            <HeartFilled className="likeIcon" /> <span> 10 Likes</span>
+
+                            <WechatOutlined className="commentIcon" /> <span> 2 Comments</span>
+                          </div>
+                        </div>
+                      ))
+                    }
+                  </>
+                ) : "Something went wrong"}
+                <div className="viewPosts">
                   <div className="postHeader" >
                     <img src={process.env.PUBLIC_URL + '/profile.png'} alt='logo' width={25} />
                     <h5> Yashkumar Jani</h5>
                     <span> 1 day ago.</span>
                   </div>
                   <div className="postContent">
-                    <p>Hello colony members, Now we will start work to build our colony gate.</p>
-                    <img src={"https://5.imimg.com/data5/ANDROID/Default/2022/12/SR/OL/XK/48484822/product-jpeg-1000x1000.jpg"} alt='logo' />
+                    {/* <p key={ele.id} > {ele.postDescription} </p> */}
                   </div>
                   <div className="postFooter">
                     {/* <HeartOutlined /> */}
-                {/* <HeartFilled className="likeIcon" /> <span> 10 Likes</span> */}
+                    <HeartFilled className="likeIcon" /> <span> 10 Likes</span>
 
-                {/* <WechatOutlined className="commentIcon" /> <span> 2 Comments</span> */}
-                {/* </div> */}
-                {/* </div>  */}
-
-                {
-                  loading ?
-
-                    posts !== [] && posts.map((ele, index) => (
-                      <div className="viewPosts">
-                        <div className="postHeader" >
-                          <img src={process.env.PUBLIC_URL + '/profile.png'} alt='logo' width={25} />
-                          <h5> Yashkumar Jani</h5>
-                          <span> 1 day ago.</span>
-                        </div>
-                        <div className="postContent">
-                          <p key={ele.id} > {ele?.allPostDetails[index].postDescription} </p>
-                        </div>
-                        <div className="postFooter">
-                          {/* <HeartOutlined /> */}
-                          <HeartFilled className="likeIcon" /> <span> 10 Likes</span>
-
-                          <WechatOutlined className="commentIcon" /> <span> 2 Comments</span>
-                        </div>
-                      </div>
-                    ))
-                    : <div className="viewPosts">Data is not Reflecting here 😒 </div>
-                }
-
+                    <WechatOutlined className="commentIcon" /> <span> 2 Comments</span>
+                  </div>
+                </div>
 
               </div>
 
