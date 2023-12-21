@@ -42,6 +42,7 @@ function Signin() {
       console.log("#User is Loggedin");
       setEmail("");
       setPassword("");
+
       // navigate('/dashboard');
     }
     catch (error) {
@@ -51,8 +52,19 @@ function Signin() {
   }
 
   useEffect(() => {
-    if (firebase.isLoggedIn) {
+    // if (firebase.isLoggedIn) {
+    //   navigate('/dashboard');
+    // }
+    if (firebase.isLoggedIn && firebase.isAdmin) {
       navigate('/dashboard');
+
+      console.log("#Admin", firebase.isAdmin)
+    }
+
+    if (firebase.isLoggedIn && !firebase.isAdmin) {
+      navigate('/dashboardUser');
+      console.log("#NotanAdmin", firebase.isAdmin)
+
     }
   }, [firebase, navigate]);
 

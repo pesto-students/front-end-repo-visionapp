@@ -79,73 +79,96 @@ function AddServiceProviders() {
   }
 
   //Define columns for Table
-  const columns = [{
-    title: "ID",
-    dataIndex: "id",
-    fixed: 'top',
-    width: 50,
-  },
-  {
-    title: "Name",
-    dataIndex: "name",
-    editTable: true,
-    fixed: 'top',
-    width: 250,
-  },
-  {
-    title: "Email",
-    dataIndex: "email",
-    editTable: true,
-    fixed: 'top',
-    width: 200,
-  },
-  {
-    title: "Body",
-    dataIndex: "body",
-    editTable: true,
-    fixed: 'top',
-    width: 500,
-  },
-  {
-    title: "Action",
-    dataIndex: "action",
-    align: "center",
-    fixed: 'top',
-    width: 250,
-    render: (_, record) => {
-      const editable = isEditing(record);
-      return modifiedData.length >= 1 ? (
-        <Space>
-          <Popconfirm
-            title="Are you sure want to delete?"
-            onConfirm={() => handleDelete(record)}>
-            <Button danger icon={<DeleteOutlined />} disabled={editable}></Button>
-          </Popconfirm>
-          {editable ? (
-            <span>
-              <Space>
-                <Button type="primary" onClick={() => saveEdit(record.key)} style={{ marginRight: 2 }} > Save</Button>
-                <Popconfirm title="Are you sure want to Cancel?" onConfirm={() => cancelEdit()}>
-                  <Button danger>Cancel</Button>
-                </Popconfirm>
-              </Space>
-            </span>
-          ) : (
-            <Button ghost type="primary"
-              icon={<EditOutlined />}
-              onClick={() => doEdit(record)} ></Button>
-          )
-          }
-        </Space >
-      ) : null;
-    }
-  }];
+  const columns = [
+    {
+      title: "ID",
+      dataIndex: "_id",
+      fixed: 'top',
+      width: 200,
+    },
+    {
+      title: "Image",
+      dataIndex: "providerImage",
+      editTable: true,
+      align: "center",
+      fixed: 'top',
+      width: 150,
+      render: (_, record) => {
+        return modifiedData.length >= 1 ? (
+          <img src={record.providerImage} width={50} />
+        ) : null;
+      }
+    },
+    {
+      title: "Provider Name",
+      dataIndex: "providerName",
+      editTable: true,
+      fixed: 'top',
+      width: 150,
+    },
+    {
+      title: "Number",
+      dataIndex: "providerNumber",
+      editTable: true,
+      fixed: 'top',
+      width: 150,
+    },
+    {
+      title: "Service Type",
+      dataIndex: "providerServiceType",
+      editTable: true,
+      fixed: 'top',
+      width: 150,
+    },
+    {
+      title: "Location",
+      dataIndex: "providerLocation",
+      editTable: true,
+      fixed: 'top',
+      width: 150,
+    },
+    {
+      title: "Action",
+      dataIndex: "action",
+      align: "center",
+      fixed: 'top',
+      width: 150,
+      render: (_, record) => {
+        const editable = isEditing(record);
+        return modifiedData.length >= 1 ? (
+          <Space>
+            <Popconfirm
+              title="Are you sure want to delete?"
+              onConfirm={() => handleDelete(record)}>
+              <Button danger icon={<DeleteOutlined />} disabled={editable}></Button>
+            </Popconfirm>
+            {editable ? (
+              <span>
+                <Space>
+                  <Button type="primary" onClick={() => saveEdit(record.key)} style={{ marginRight: 2 }} > Save</Button>
+                  <Popconfirm title="Are you sure want to Cancel?" onConfirm={() => cancelEdit()}>
+                    <Button danger>Cancel</Button>
+                  </Popconfirm>
+                </Space>
+              </span>
+            ) : (
+              <Button ghost type="primary"
+                icon={<EditOutlined />}
+                onClick={() => doEdit(record)} ></Button>
+            )
+            }
+          </Space >
+        ) : null;
+      }
+    }];
 
   //Load data in Table
   const loadDataInTable = async () => {
     setLoading(true);
-    const response = await axios.get("https://jsonplaceholder.typicode.com/comments");
-    setGridData(response.data);
+    // const response = await axios.get("https://jsonplaceholder.typicode.com/comments");
+    const response = await axios.get("http://localhost:8080/api/v1/provider/all-providers");
+    setGridData(response.data.allProvidersDetails);
+    console.log("#GridData", response.data);
     setLoading(false);
   }
 

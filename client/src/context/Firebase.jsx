@@ -61,11 +61,12 @@ export const FirebaseProvider = (props) => {
     })
 
     const isLoggedIn = user ? true : false;
+    const isAdmin = user?.email === "joe@gmail.com" ? true : false;
 
     // const registerUserDetails = async(username, email, password, confirmPassword, dob, gender, profileImg) => {
     // const registerUserDetails = async(username, email, password, confirmPassword, dob, gender) => {
     // const registerUserDetails = async (username, email, password, dob, gender) => {
-        const registerUserDetails = async (username, email, password, gender) => {
+    const registerUserDetails = async (username, email, password, gender) => {
         // const profileImgRef = ref(storage, `uploads/images/${Date.now()}-${profileImg.username}`);
         // const uploadResult = await uploadBytes(profileImgRef, profileImg);
         return await addDoc(collection(firestore, 'profiles'), {
@@ -110,7 +111,7 @@ export const FirebaseProvider = (props) => {
             loginUserWithEmailAndPassword,
             loginWithGoogle, isLoggedIn,
             logoutUser,
-            resetEmailPassword
+            resetEmailPassword, isAdmin
         }}>
             {props.children}
         </FirebaseContext.Provider>
