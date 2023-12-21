@@ -1,11 +1,13 @@
 import { useNavigate } from "react-router-dom";
-import { Layout, Space, Flex, Card, Breadcrumb, Form, Input, Upload, Button, Select, Popconfirm, Table } from 'antd';
+import { Layout, Space, Flex, Card, Breadcrumb, Form, Input, Upload, Button, Select, Popconfirm, Table, message } from 'antd';
 import { HomeOutlined, UserOutlined, FileImageOutlined, HeartOutlined, HeartFilled, WechatOutlined, DeleteOutlined, EditOutlined, PhoneOutlined, EnvironmentOutlined } from '@ant-design/icons';
 import LHeader from '../../components/Header/LHeader';
 import './AddServiceProviders.scss';
 import LFooter from '../../components/Footer/LFooter';
 import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from 'react-redux';
 import axios from "axios";
+import { addProvider, getAllProviders } from "../../features/providerDetailsSlice";
 
 const { Header, Content, Footer } = Layout;
 const { Meta } = Card;
@@ -29,6 +31,7 @@ const EditableCell = ({ editing, dataIndex, title, record, children, ...restProp
 
 function AddServiceProviders() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   //Editing Data in Form
   const [form] = Form.useForm();
@@ -181,11 +184,48 @@ function AddServiceProviders() {
     }
   });
 
+  //Notification Code
+  const [messageApi, contextHolder] = message.useMessage();
+
+  const success = () => {
+    messageApi.open({
+      type: 'success',
+      content: 'Provider is added Successfully',
+    });
+  };
+
+  const error = () => {
+    messageApi.open({
+      type: 'error',
+      content: 'Something went wrong!',
+    });
+  };
+
 
   //value is coming in console but...
-  const handleSubmit = async (values) => {
-    console.log({ values });
+  const handleSubmit = (values) => {
+    try {
+      console.log({ values });
+      const formData = new FormData();
+      formData.append('providerName', values.providerName);
+      formData.append('providerNumber', values.providerNumber);
+      formData.append('providerServiceType', values.providerService);
+      formData.append('providerLocation', values.providerLocation);
+      formData.append('providerImage', values.providerImage.file.originFileObj);
+      dispatch(addProvider(formData));
+      success();
+    }
+    catch (error) {
+      console.warn("#Error", error);
+      error(error);
+    }
+
+
   }
+
+  useEffect(() => {
+    dispatch(getAllProviders());
+  }, [dispatch]);
   return (
     <>
       <Space direction="vertical" style={{ width: '100%' }} size={[0, 48]}>
@@ -253,7 +293,7 @@ function AddServiceProviders() {
 
                     <Form.Item name="providerImage">
                       <Upload
-                        action="/upload.do"
+                        action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
                         listType="picture"
                         maxCount={1}
                         // onChange={(e) => setPostImage(e.target.files[0])}

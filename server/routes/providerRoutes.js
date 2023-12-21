@@ -1,5 +1,5 @@
 const express = require("express");
-const { getAllPostsController, createPostController, updatePostController, getSinglePostByIDController, deletePostByIDController } = require("../controller/useController");
+const { getAllProvidersController, addProviderController, updateProviderController, getSingleProviderByIDController, deleteProviderByIDController } = require("../controller/useController");
 const multer = require('multer');
 
 // Image storage path
@@ -21,18 +21,19 @@ const upload = multer({
 const router = express.Router();
 
 // ================
-// *  POSTS APIs  *
+// *  PROVIDER APIs  *
 // ================
 
 //get method || GET
-router.get('/all-posts', getAllPostsController)
+router.get('/all-providers', getAllProvidersController)
 //post method || POST
-router.post('/create-post', upload.single("postUploadImage"), createPostController)
+router.post('/add-provider', upload.single("providerImage"), addProviderController)
 //update method || PUT
-router.put('/update-post/:id', updatePostController)
+router.put('/update-provider/:id', updateProviderController)
 //get method for fetch single detail || GET
-router.get('/get-single-post/:id', getSinglePostByIDController)
+router.get('/get-single-provider/:id', getSingleProviderByIDController)
 //delete method || DELETE
-router.delete('/delete-post/:id', deletePostByIDController)
+router.delete('/delete-provider/:id', deleteProviderByIDController)
+
 
 module.exports = router;

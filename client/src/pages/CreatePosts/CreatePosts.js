@@ -15,23 +15,20 @@ function CreatePosts() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [postDescription, setPostDescription] = useState(null);
-  const [postUploadImage, setPostUploadImage] = useState("");
+  // const [postDescription, setPostDescription] = useState(null);
+  // const [postUploadImage, setPostUploadImage] = useState("");
 
   const postData = useSelector((state) => state.post);
   console.log("#PostData", postData);
 
   const handleSubmit = (values) => {
-    console.log("Post Values :", values.postText + " and " + values.postImg.fileList[0]);
-
-    setPostDescription(values.postText);
-    setPostUploadImage(values.postImg.fileList[0]);
-    console.log("#setPostDescription", postDescription);
-    console.log("#postUploadImage", postUploadImage);
+    // console.log("Handle Submit Values", values)
+    // console.log("#setPostDescription", values.postText);
+    // console.log("#postUploadImage", values.postImg.file.originFileObj);
 
     const formData = new FormData();
-    formData.append('postDescription', postDescription);
-    formData.append('postUploadImage', postUploadImage);
+    formData.append('postDescription', values.postText);
+    formData.append('postUploadImage', values.postImg.file.originFileObj);
     dispatch(createPost(formData));
   }
 
@@ -68,16 +65,6 @@ function CreatePosts() {
                   <div className="addFormDetails">
                     <Form onFinish={handleSubmit} >
                       <Form.Item name="postText"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please enter your email."
-                          },
-                          {
-                            type: "text",
-                            message: "Please enter a valid email."
-                          },
-                        ]}
                         hasFeedback>
                         <Input
                           // onChange={(e) => setDescription(e.target.value)}
@@ -107,12 +94,10 @@ function CreatePosts() {
                   </div>
                 </div>
 
-                {/* {posts?.data?.allPostDetails[0] ?
-                  posts?.data?.allPostDetails.map((ele, index) => ( */}
                 {postData.loading && <div>Loading </div>}
                 {!postData.loading && postData.error ? <div>Error : {postData.error} </div> : null}
-                {!postData.loading && postData.posts ? (
-                  <>
+                {!postData.loading && postData.posts?.data?.allPostDetails ? (
+                  <div>
                     {
                       postData?.posts?.data?.allPostDetails.map((el, index) => (
                         <div className="viewPosts">
@@ -123,6 +108,7 @@ function CreatePosts() {
                           </div>
                           <div className="postContent">
                             <p key={index} > {el.postDescription} </p>
+                            <img src={el.postUploadImage} />
                           </div>
                           <div className="postFooter">
                             {/* <HeartOutlined /> */}
@@ -133,24 +119,8 @@ function CreatePosts() {
                         </div>
                       ))
                     }
-                  </>
+                  </div>
                 ) : "Something went wrong"}
-                <div className="viewPosts">
-                  <div className="postHeader" >
-                    <img src={process.env.PUBLIC_URL + '/profile.png'} alt='logo' width={25} />
-                    <h5> Yashkumar Jani</h5>
-                    <span> 1 day ago.</span>
-                  </div>
-                  <div className="postContent">
-                    {/* <p key={ele.id} > {ele.postDescription} </p> */}
-                  </div>
-                  <div className="postFooter">
-                    {/* <HeartOutlined /> */}
-                    <HeartFilled className="likeIcon" /> <span> 10 Likes</span>
-
-                    <WechatOutlined className="commentIcon" /> <span> 2 Comments</span>
-                  </div>
-                </div>
 
               </div>
 
