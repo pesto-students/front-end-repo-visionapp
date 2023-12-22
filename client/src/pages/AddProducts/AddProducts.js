@@ -90,14 +90,14 @@ function AddProducts() {
     },
     {
       title: "Image",
-      dataIndex: "poductImage",
+      dataIndex: "productImage",
       editTable: true,
       align: "center",
       fixed: 'top',
       width: 150,
       render: (_, record) => {
         return modifiedData.length >= 1 ? (
-          <img src={record.poductImage} width={50} />
+          <img src={record.productImage} width={50} />
         ) : null;
       }
     },
@@ -227,7 +227,7 @@ function AddProducts() {
       formData.append('productName', values.productName);
       formData.append('productPrice', values.productPrice);
       formData.append('productType', values.productType);
-      formData.append('poductImage', values.poductImage.file.originFileObj);
+      formData.append('productImage', values.productImage.file.originFileObj);
       dispatch(addProduct(formData));
       success();
     }

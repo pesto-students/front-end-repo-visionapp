@@ -291,7 +291,7 @@ exports.addProductController = async (req, res) => {
         const productName = req.body.productName;
         const productPrice = req.body.productPrice;
         const productType = req.body.productType;
-        const poductImage = req.file.path;
+        const productImage = req.file.path;
         // Validation --- if(!productName || !productPrice)
         if (!productName) {
             return res.status(400).send({
@@ -300,7 +300,7 @@ exports.addProductController = async (req, res) => {
             })
         }
         // Save new user
-        const productDetails = new productModel({ productName, productPrice, productType, poductImage });
+        const productDetails = new productModel({ productName, productPrice, productType, productImage });
         await productDetails.save();
         return res.status(201).send({
             success: true,

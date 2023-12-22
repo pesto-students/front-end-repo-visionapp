@@ -6,7 +6,7 @@ import './ViewPosts.scss';
 import LFooter from '../../components/Footer/LFooter';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from "react";
-import { createPost, getAllPosts } from "../../features/postDetailsSlice";
+import { getAllPosts } from "../../features/postDetailsSlice";
 
 const { Header, Content, Footer } = Layout;
 const { Meta } = Card;
@@ -15,51 +15,12 @@ function ViewPosts() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [postDescription, setPostDescription] = useState(null);
-  const [postUploadImage, setPostUploadImage] = useState("");
-
-  const { posts, loading } = useSelector((state) => state.post);
-  console.log("#AllPost", posts?.data?.allPostDetails[0]?.postDescription);
-  // console.log("#AllPost", data.allPostDetails);
-
-  // const handleSubmit = async (e) => {
-  //   // e.preventDefault();
-  //   try {
-  //     console.log("#Creating Post.");
-  //     dispatch(createPost(description));
-  //     setDescription({
-  //       postDescription: ""
-  //     });
-  //     console.log("#Post Created.");
-  //   }
-  //   catch (error) {
-  //     console.warn("#CreatePost Error", error);
-  //     error(error);
-  //   }
-  // }
-
-  const handleSubmit = (values) => {
-    console.log("Post Values :", values.postText + " and " + values.postImg.fileList[0]);
-
-    setPostDescription(values.postText);
-    setPostUploadImage(values.postImg.fileList[0]);
-    console.log("#setPostDescription", postDescription);
-    console.log("#postUploadImage", postUploadImage);
-
-    const formData = new FormData();
-    formData.append('postDescription', postDescription);
-    formData.append('postUploadImage', postUploadImage);
-    dispatch(createPost(formData));
-  }
+  const postData = useSelector((state) => state.post);
+  console.log("#PostData", postData);
 
   useEffect(() => {
     dispatch(getAllPosts());
   }, [dispatch]);
-
-  if (loading) {
-    return <Flex align="center" gap="middle" justify="center" style={{ height: '100vh' }}><Spin size="large" /></Flex>;
-  }
-
 
   return (
     <>
@@ -83,77 +44,33 @@ function ViewPosts() {
 
               <div className="leftPostsContentArea">
                 <h2> View Posts</h2>
-                {/* <div className="postsForm" style={{ background: "White" }}>
-                  <div className="imgOfAdmin" >
-                    <img src={process.env.PUBLIC_URL + '/profile.png'} alt='logo' width={50} />
+                {postData.loading && <div>Loading </div>}
+                {!postData.loading && postData.error ? <div>Error : {postData.error} </div> : null}
+                {!postData.loading && postData.posts?.data?.allPostDetails.length ? (
+                  <div>
+                    {
+                      postData?.posts?.data?.allPostDetails.map((el, index) => (
+                        <div className="viewPosts">
+                          <div className="postHeader" >
+                            <img src={process.env.PUBLIC_URL + '/profile.png'} alt='logo' width={25} />
+                            <h5> Yashkumar Jani</h5>
+                            <span> 1 day ago.</span>
+                          </div>
+                          <div className="postContent">
+                            <p key={index} > {el.postDescription} </p>
+                            <img src={el.postUploadImage} />
+                          </div>
+                          <div className="postFooter">
+                            {/* <HeartOutlined /> */}
+                            <HeartFilled className="likeIcon" /> <span> 10 Likes</span>
+
+                            <WechatOutlined className="commentIcon" /> <span> 2 Comments</span>
+                          </div>
+                        </div>
+                      ))
+                    }
                   </div>
-                  <div className="addFormDetails">
-                    <Form onFinish={handleSubmit} >
-                      <Form.Item name="postText"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please enter your email."
-                          },
-                          {
-                            type: "text",
-                            message: "Please enter a valid email."
-                          },
-                        ]}
-                        hasFeedback>
-                        <Input
-                          // onChange={(e) => setDescription(e.target.value)}
-                          // value={description}
-                          className='formInput'
-                          placeholder="What's happening?" />
-                      </Form.Item>
-                      <div className="postSection">
-                        <Form.Item name="postImg">
-                          <Upload
-                            action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
-                            listType="picture"
-                            maxCount={1}
-                            // onChange={(e) => setPostImage(e.target.files[0])}
-                            // value={postImage}
-                            multiple
-                            className="postUpload"
-                          >
-                            <Button icon={<FileImageOutlined />}></Button>
-                          </Upload>
-                        </Form.Item>
-                        <Button className="postBtn" htmlType="submit"> Post </Button>
-                      </div>
-                    </Form>
-
-
-                  </div>
-                </div> */}
-
-                {
-                  loading ?
-
-                    posts !== [] && posts.map((ele, index) => (
-                      <div className="viewPosts">
-                        <div className="postHeader" >
-                          <img src={process.env.PUBLIC_URL + '/profile.png'} alt='logo' width={25} />
-                          <h5> Yashkumar Jani</h5>
-                          <span> 1 day ago.</span>
-                        </div>
-                        <div className="postContent">
-                          <p key={ele.id} > {ele?.allPostDetails[index].postDescription} </p>
-                        </div>
-                        <div className="postFooter">
-                          {/* <HeartOutlined /> */}
-                          <HeartFilled className="likeIcon" /> <span> 10 Likes</span>
-
-                          <WechatOutlined className="commentIcon" /> <span> 2 Comments</span>
-                        </div>
-                      </div>
-                    ))
-                    : <div className="viewPosts">Data is not Reflecting here 😒 </div>
-                }
-
-
+                ) : null}
               </div>
 
               <div className="rightPostsContentArea">

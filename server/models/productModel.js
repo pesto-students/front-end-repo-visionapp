@@ -13,7 +13,7 @@ const productScheme = new mongoose.Schema({
         type: String,
         // required: [true, 'Service Type is required.']
     },
-    poductImage: {
+    productImage: {
         type: String,
         // required: true
     }

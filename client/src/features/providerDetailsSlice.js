@@ -45,7 +45,7 @@ export const providerDetailsSlice = createSlice({
     })
     builder.addCase(getAllProviders.fulfilled, (state, action) => {
       state.loading = false;
-      state.posts = action.payload;
+      state.providers = action.payload;
     })
     builder.addCase(getAllProviders.rejected, (state, action) => {
       state.loading = false;
@@ -56,7 +56,7 @@ export const providerDetailsSlice = createSlice({
     })
     builder.addCase(addProvider.fulfilled, (state, action) => {
       state.loading = false;
-      state.posts = action.payload;
+      state.providers = action.payload;
     })
     builder.addCase(addProvider.rejected, (state, action) => {
       state.loading = false;

@@ -4,13 +4,23 @@ import { HomeOutlined, UserOutlined, FileImageOutlined, HeartOutlined, HeartFill
 import LHeader from '../../components/Header/LHeader';
 import './ReviewTicket.scss';
 import LFooter from '../../components/Footer/LFooter';
+import { useEffect } from "react";
+import { useSelector, useDispatch } from 'react-redux';
+import { getAllTickets } from "../../features/ticketDetailsSlice";
 
 const { Header, Content, Footer } = Layout;
 const { Meta } = Card;
 
 function ReviewTicket() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
+  const ticketData = useSelector((state) => state.ticket);
+  console.log("#ticketData", ticketData);
+
+  useEffect(() => {
+    dispatch(getAllTickets());
+  }, [dispatch]);
   return (
     <>
       <Space direction="vertical" style={{ width: '100%' }} size={[0, 48]}>
@@ -32,56 +42,28 @@ function ReviewTicket() {
             <div className='mainReviewTicketContentArea'>
               <h2> Raised tickets by colony members</h2>
               <div className="reviewTicketContainer">
-                <Row gutter={12}>
-                  <Col span={6} >
-                    <div className="insideColumn">
-                      <div className="profileImg">
-                        <img src={process.env.PUBLIC_URL + '/profile.png'} alt='logo' />
-                        <h2> Meet Pandya </h2>
-                      </div>
-                      <div className="profileMsg">
-                        <p> He has created the ticket for <strong>Society needs to analyze the issue </strong> regarding the <b> Fund </b> on <b> 31, Dec, 2023</b> where the issue is <b> When people of colony is not able to intrest to collect the Fund</b> click on view button to get more details. </p>
-                        <Button type="primary" className="viewBtn" > CHAT</Button>
-                      </div>
-                    </div>
-                  </Col>
-                  <Col span={6} >
-                    <div className="insideColumn">
-                      <div className="profileImg">
-                        <img src={process.env.PUBLIC_URL + '/profile.png'} alt='logo' />
-                        <h2> Meet Pandya </h2>
-                      </div>
-                      <div className="profileMsg">
-                        <p> He has created the ticket for <strong>Society needs to analyze the issue </strong> regarding the <b> Fund </b> on <b> 31, Dec, 2023</b> where the issue is <b> When people of colony is not able to intrest to collect the Fund</b> click on view button to get more details. </p>
-                        <Button type="primary" className="viewBtn" > CHAT</Button>
-                      </div>
-                    </div>
-                  </Col>
-                  <Col span={6} >
-                    <div className="insideColumn">
-                      <div className="profileImg">
-                        <img src={process.env.PUBLIC_URL + '/profile.png'} alt='logo' />
-                        <h2> Meet Pandya </h2>
-                      </div>
-                      <div className="profileMsg">
-                        <p> He has created the ticket for <strong>Society needs to analyze the issue </strong> regarding the <b> Fund </b> on <b> 31, Dec, 2023</b> where the issue is <b> When people of colony is not able to intrest to collect the Fund</b> click on view button to get more details. </p>
-                        <Button type="primary" className="viewBtn" > CHAT</Button>
-                      </div>
-                    </div>
-                  </Col>
-                  <Col span={6} >
-                    <div className="insideColumn">
-                      <div className="profileImg">
-                        <img src={process.env.PUBLIC_URL + '/profile.png'} alt='logo' />
-                        <h2> Meet Pandya </h2>
-                      </div>
-                      <div className="profileMsg">
-                        <p> He has created the ticket for <strong>Society needs to analyze the issue </strong> regarding the <b> Fund </b> on <b> 31, Dec, 2023</b> where the issue is <b> When people of colony is not able to intrest to collect the Fund</b> click on view button to get more details. </p>
-                        <Button type="primary" className="viewBtn" > CHAT</Button>
-                      </div>
-                    </div>
-                  </Col>
-                </Row>
+                {ticketData.loading && <div>Loading </div>}
+                {!ticketData.loading && ticketData.error ? <div>Error : {ticketData.error} </div> : null}
+                {!ticketData.loading && ticketData.tickets?.data?.allTicketsDetails.length ? (
+                  <Row gutter={24}>
+                    {ticketData.tickets?.data?.allTicketsDetails.map((el, index) => (
+                      <Col span={6} >
+                        <div className="insideColumn">
+                          <div className="profileImg">
+                            <img src={el.ticketIssueProofImage} alt='logo' />
+                            <h2> Meet Pandya </h2>
+                          </div>
+                          <div className="profileMsg">
+                            <p> He has created the ticket for <strong>{el.ticketTitle} </strong> regarding the <b> {el.ticketType} </b> on <b> {el.dateOfRaisedTicket}</b> where the issue is <b> {el.ticketDescription}</b> click on view button to get more details. </p>
+                            <Button type="primary" className="viewBtn" > CHAT</Button>
+                          </div>
+                        </div>
+                      </Col>
+                    ))
+                    }
+                  </Row>
+                ) : null}
+
               </div>
             </div>
           </Content>

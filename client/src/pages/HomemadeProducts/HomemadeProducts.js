@@ -4,12 +4,27 @@ import { HomeOutlined, UserOutlined, FileImageOutlined, HeartOutlined, HeartFill
 import LHeader from '../../components/Header/LHeader';
 import './HomemadeProducts.scss';
 import LFooter from '../../components/Footer/LFooter';
+import { useEffect } from "react";
+import { useSelector, useDispatch } from 'react-redux';
+import { getAllProducts } from "../../features/productDetailsSlice";
 
 const { Header, Content, Footer } = Layout;
 const { Meta } = Card;
 
 function HomemadeProducts() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const productData = useSelector((state) => state.product);
+
+  //Filter Tutor providers from APIs
+  const woodworkList = productData?.products?.data?.allProductsDetails.filter(
+    (el) => el.productType == "woodwork", []
+  );
+
+  useEffect(() => {
+    dispatch(getAllProducts());
+  }, [dispatch]);
 
   return (
     <>
@@ -35,80 +50,33 @@ function HomemadeProducts() {
                 <div className="leftContainer">
                   <Tabs tabPosition="left" defaultActiveKey="tab1">
                     <Tabs.TabPane tab="Woodwork" key="tab1">
-                      <Row gutter={12}>
-                        <Col span={6}>
-                          <Card
-                            bordered={false}
-                            cover={
-                              <img
-                                alt="example"
-                                src="https://theindiacrafthouse.com/cdn/shop/products/Wooden_Decorative_Jewellery_Box_-_WDJBA_1024x1024@2x.JPG?v=1579729040"
-                              />
-                            }>
-                            <Meta
-                              title="Decorative Utility Box"
-                              description="This is the description"
-                            />
+                      {productData.loading && <div>Loading </div>}
+                      {!productData.loading && productData.error ? <div>Error : {productData.error} </div> : null}
+                      {!productData.loading && productData.products?.data?.allProductsDetails.length ? (
+                        <Row gutter={24}>
+                          {woodworkList.map((el, index) => (
+                            <Col span={6}>
+                              <Card
+                                bordered={false}
+                                cover={
+                                  <img
+                                    alt="example"
+                                    src={el.poductImage}
+                                  />
+                                }>
+                                <Meta
+                                  title={el.productName}
+                                  description={el.productType}
+                                />
 
-                            <p> Price :- <b>399/- </b></p>
-                            <Button ghost type="primary"> ADD TO CART</Button>
-                          </Card>
-                        </Col>
-                        <Col span={6}>
-                          <Card
-                            bordered={false}
-                            cover={
-                              <img
-                                alt="example"
-                                src="https://theindiacrafthouse.com/cdn/shop/products/Wooden_Decorative_Jewellery_Box_-_WDJBA_1024x1024@2x.JPG?v=1579729040"
-                              />
-                            }>
-                            <Meta
-                              title="Decorative Utility Box"
-                              description="This is the description"
-                            />
-
-                            <p> Price :- <b>399/- </b></p>
-                            <Button ghost type="primary"> ADD TO CART</Button>
-                          </Card>
-                        </Col>
-                        <Col span={6}>
-                          <Card
-                            bordered={false}
-                            cover={
-                              <img
-                                alt="example"
-                                src="https://theindiacrafthouse.com/cdn/shop/products/Wooden_Decorative_Jewellery_Box_-_WDJBA_1024x1024@2x.JPG?v=1579729040"
-                              />
-                            }>
-                            <Meta
-                              title="Decorative Utility Box"
-                              description="This is the description"
-                            />
-
-                            <p> Price :- <b>399/- </b></p>
-                            <Button ghost type="primary"> ADD TO CART</Button>
-                          </Card>
-                        </Col>
-                        <Col span={6}>
-                          <Card
-                            bordered={false}
-                            cover={
-                              <img
-                                alt="example"
-                                src="https://theindiacrafthouse.com/cdn/shop/products/Wooden_Decorative_Jewellery_Box_-_WDJBA_1024x1024@2x.JPG?v=1579729040"
-                              />
-                            }>
-                            <Meta
-                              title="Decorative Utility Box"
-                              description="This is the description"
-                            />
-
-                            <p> Price :- <b>399/- </b></p>
-                            <Button ghost type="primary"> ADD TO CART</Button>
-                          </Card>
-                        </Col>
-                      </Row>
+                                <p> Price :- <b>₹ &nbsp; {el.productPrice} </b></p>
+                                <Button ghost type="primary"> ADD TO CART</Button>
+                              </Card>
+                            </Col>
+                          ))
+                          }
+                        </Row>
+                      ) : null}
                     </Tabs.TabPane>
                     <Tabs.TabPane tab="Pottery" key="tab2">
                       <p> Tab 2</p>

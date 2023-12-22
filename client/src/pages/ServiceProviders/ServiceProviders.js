@@ -4,14 +4,42 @@ import { HomeOutlined, UserOutlined, FileImageOutlined, HeartOutlined, HeartFill
 import LHeader from '../../components/Header/LHeader';
 import './ServiceProviders.scss';
 import LFooter from '../../components/Footer/LFooter';
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from 'react-redux';
+import { getAllProviders } from "../../features/providerDetailsSlice";
 
 const { Header, Content, Footer } = Layout;
 const { Meta } = Card;
 
 function ServiceProviders() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const [open, setOpen] = useState(false);
+
+  const providerData = useSelector((state) => state.provider);
+
+  //Filter Tutor providers from APIs
+  const tutorList = providerData?.providers?.data?.allProvidersDetails.filter(
+    (el) => el.providerServiceType == "tutor",
+    []
+  );
+
+  //Filter stationery providers from APIs
+  const stationeryList = providerData?.providers?.data?.allProvidersDetails.filter(
+    (el) => el.providerServiceType == "stationery",
+    []
+  );
+
+  //Filter stationery providers from APIs
+  const gymList = providerData?.providers?.data?.allProvidersDetails.filter(
+    (el) => el.providerServiceType == "gym",
+    []
+  );
+
+  useEffect(() => {
+    dispatch(getAllProviders());
+  }, [dispatch]);
 
   return (
     <>
@@ -37,122 +65,37 @@ function ServiceProviders() {
                 <div className="tabContainer">
                   <Tabs tabPosition="left" defaultActiveKey="tab1">
                     <Tabs.TabPane tab="Tutor" key="tab1">
-                      <Row gutter={12}>
-                        <Col span={4}>
-                          <Card
-                            bordered={false}
-                            className="cardDetail"
-                            cover={
-                              <img
-                                alt="example"
-                                src="https://cdn1.iconfinder.com/data/icons/people-cultures/512/_indian_man-512.png"
-                              />
-                            }>
-                            <Meta
-                              title="RAMESH PATEL"
-                              description="He is a teacher..."
-                            />
+                      {providerData.loading && <div>Loading </div>}
+                      {!providerData.loading && providerData.error ? <div>Error : {providerData.error} </div> : null}
+                      {!providerData.loading && providerData.providers?.data?.allProvidersDetails.length ? (
+                        <Row gutter={24}>
+                          {
+                            // providerData?.providers?.data?.allProvidersDetails.map((el, index) => (
+                            tutorList.map((el, index) => (
+                              <Col span={4}>
+                                <Card
+                                  bordered={false}
+                                  className="cardDetail"
+                                  key={index}
+                                  cover={
+                                    <img
+                                      alt="example"
+                                      src={el.providerImage}
+                                    />
+                                  }>
+                                  <Meta
+                                    title={el.providerName}
+                                    description={el.providerServiceType}
+                                  />
+                                  <h5> Location :- <b>{el.providerLocation}. </b></h5>
+                                  <Button type="primary" onClick={() => setOpen(true)}> View Detail</Button>
+                                </Card>
+                              </Col>
+                            ))
+                          }
+                        </Row>
 
-                            <h5> Location :- <b> Babra, Amreli. </b></h5>
-                            <Button type="primary" onClick={() => setOpen(true)}> View Detail</Button>
-                          </Card>
-                        </Col>
-                        <Col span={4}>
-                          <Card
-                            bordered={false}
-                            className="cardDetail"
-                            cover={
-                              <img
-                                alt="example"
-                                src="https://cdn1.iconfinder.com/data/icons/people-cultures/512/_indian_man-512.png"
-                              />
-                            }>
-                            <Meta
-                              title="RAMESH PATEL"
-                              description="He is a teacher..."
-                            />
-
-                            <h5> Location :- <b> Babra, Amreli. </b></h5>
-                            <Button type="primary" onClick={() => setOpen(true)}> View Detail</Button>
-                          </Card>
-                        </Col>
-                        <Col span={4}>
-                          <Card
-                            bordered={false}
-                            className="cardDetail"
-                            cover={
-                              <img
-                                alt="example"
-                                src="https://cdn1.iconfinder.com/data/icons/people-cultures/512/_indian_man-512.png"
-                              />
-                            }>
-                            <Meta
-                              title="RAMESH PATEL"
-                              description="He is a teacher..."
-                            />
-
-                            <h5> Location :- <b> Babra, Amreli. </b></h5>
-                            <Button type="primary" onClick={() => setOpen(true)}> View Detail</Button>
-                          </Card>
-                        </Col>
-                        <Col span={4}>
-                          <Card
-                            bordered={false}
-                            className="cardDetail"
-                            cover={
-                              <img
-                                alt="example"
-                                src="https://cdn1.iconfinder.com/data/icons/people-cultures/512/_indian_man-512.png"
-                              />
-                            }>
-                            <Meta
-                              title="RAMESH PATEL"
-                              description="He is a teacher..."
-                            />
-
-                            <h5> Location :- <b> Babra, Amreli. </b></h5>
-                            <Button type="primary" onClick={() => setOpen(true)}> View Detail</Button>
-                          </Card>
-                        </Col>
-                        <Col span={4}>
-                          <Card
-                            bordered={false}
-                            className="cardDetail"
-                            cover={
-                              <img
-                                alt="example"
-                                src="https://cdn1.iconfinder.com/data/icons/people-cultures/512/_indian_man-512.png"
-                              />
-                            }>
-                            <Meta
-                              title="RAMESH PATEL"
-                              description="He is a teacher..."
-                            />
-
-                            <h5> Location :- <b> Babra, Amreli. </b></h5>
-                            <Button type="primary" onClick={() => setOpen(true)}> View Detail</Button>
-                          </Card>
-                        </Col>
-                        <Col span={4}>
-                          <Card
-                            bordered={false}
-                            className="cardDetail"
-                            cover={
-                              <img
-                                alt="example"
-                                src="https://cdn1.iconfinder.com/data/icons/people-cultures/512/_indian_man-512.png"
-                              />
-                            }>
-                            <Meta
-                              title="RAMESH PATEL"
-                              description="He is a teacher..."
-                            />
-
-                            <h5> Location :- <b> Babra, Amreli. </b></h5>
-                            <Button type="primary" onClick={() => setOpen(true)}> View Detail</Button>
-                          </Card>
-                        </Col>
-                      </Row>
+                      ) : null}
                       <Modal
                         title="Details of Service Provider"
                         centered
@@ -184,11 +127,71 @@ function ServiceProviders() {
                         </Row>
                       </Modal>
                     </Tabs.TabPane>
-                    <Tabs.TabPane tab="Fuel Station" key="tab2">
-                      <p> Tab 2</p>
+                    <Tabs.TabPane tab="Stationery" key="tab2">
+                      {providerData.loading && <div>Loading </div>}
+                      {!providerData.loading && providerData.error ? <div>Error : {providerData.error} </div> : null}
+                      {!providerData.loading && providerData.providers?.data?.allProvidersDetails.length ? (
+                        <Row gutter={24}>
+                          {
+                            // providerData?.providers?.data?.allProvidersDetails.map((el, index) => (
+                            stationeryList.map((el, index) => (
+                              <Col span={4}>
+                                <Card
+                                  bordered={false}
+                                  className="cardDetail"
+                                  key={index}
+                                  cover={
+                                    <img
+                                      alt="example"
+                                      src={el.providerImage}
+                                    />
+                                  }>
+                                  <Meta
+                                    title={el.providerName}
+                                    description={el.providerServiceType}
+                                  />
+                                  <h5> Location :- <b>{el.providerLocation}. </b></h5>
+                                  <Button type="primary" onClick={() => setOpen(true)}> View Detail</Button>
+                                </Card>
+                              </Col>
+                            ))
+                          }
+                        </Row>
+
+                      ) : null}
                     </Tabs.TabPane>
-                    <Tabs.TabPane tab="Stationery" key="tab3">
-                      <p> Tab 3</p>
+                    <Tabs.TabPane tab="Gym" key="tab3">
+                      {providerData.loading && <div>Loading </div>}
+                      {!providerData.loading && providerData.error ? <div>Error : {providerData.error} </div> : null}
+                      {!providerData.loading && providerData.providers?.data?.allProvidersDetails.length ? (
+                        <Row gutter={24}>
+                          {
+                            // providerData?.providers?.data?.allProvidersDetails.map((el, index) => (
+                            gymList.map((el, index) => (
+                              <Col span={4}>
+                                <Card
+                                  bordered={false}
+                                  className="cardDetail"
+                                  key={index}
+                                  cover={
+                                    <img
+                                      alt="example"
+                                      src={el.providerImage}
+                                    />
+                                  }>
+                                  <Meta
+                                    title={el.providerName}
+                                    description={el.providerServiceType}
+                                  />
+                                  <h5> Location :- <b>{el.providerLocation}. </b></h5>
+                                  <Button type="primary" onClick={() => setOpen(true)}> View Detail</Button>
+                                </Card>
+                              </Col>
+                            ))
+                          }
+                        </Row>
+
+                      ) : null}
                     </Tabs.TabPane>
                     <Tabs.TabPane tab="Electronic Repair" key="tab4">
                       <p> Tab 4</p>

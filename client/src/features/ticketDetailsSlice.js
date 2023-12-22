@@ -33,7 +33,7 @@ export const addTicket = createAsyncThunk(
 export const ticketDetailsSlice = createSlice({
   name: "ticketDetailsSlice",
   initialState: {
-    providers: [],
+    tickets: [],
     loading: false,
     error: null,
   },
@@ -45,7 +45,7 @@ export const ticketDetailsSlice = createSlice({
     })
     builder.addCase(getAllTickets.fulfilled, (state, action) => {
       state.loading = false;
-      state.posts = action.payload;
+      state.tickets = action.payload;
     })
     builder.addCase(getAllTickets.rejected, (state, action) => {
       state.loading = false;
@@ -56,7 +56,7 @@ export const ticketDetailsSlice = createSlice({
     })
     builder.addCase(addTicket.fulfilled, (state, action) => {
       state.loading = false;
-      state.posts = action.payload;
+      state.tickets = action.payload;
     })
     builder.addCase(addTicket.rejected, (state, action) => {
       state.loading = false;
