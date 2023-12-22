@@ -29,6 +29,8 @@ app.use(bodyParser.json())
 //router imports
 const postsRoutes = require('./routes/postRoutes');
 const providersRoutes = require('./routes/providerRoutes');
+const productRoute = require('./routes/productRoute');
+const ticketRoute = require('./routes/ticketRoutes');
 
 
 //mongoDB connection
@@ -37,6 +39,8 @@ connectDB();
 //ROUTES
 app.use('/api/v1/post', postsRoutes);
 app.use('/api/v1/provider', providersRoutes);
+app.use('/api/v1/product', productRoute);
+app.use('/api/v1/ticket', ticketRoute);
 
 //PORT
 const PORT = process.env.PORT || 8080;

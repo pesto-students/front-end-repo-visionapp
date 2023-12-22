@@ -1,5 +1,7 @@
 const postModel = require("../models/postModel");
+const productModel = require("../models/productModel");
 const providerModel = require("../models/providerModel");
+const ticketModel = require("../models/ticketModel");
 
 // =============================
 // *  PROSTS APIs CONTROLLER  *
@@ -259,3 +261,267 @@ exports.deleteProviderByIDController = async (req, res) => {
         })
     }
 }
+
+// =============================
+// *  PRODUCTS APIs CONTROLLER  *
+// =============================
+//get all products
+exports.getAllProductsController = async (req, res) => {
+    try {
+        const allProductsDetails = await productModel.find({});
+        return res.status(200).send({
+            userCount: allProductsDetails.length,
+            success: true,
+            message: "All Products details are here.",
+            allProductsDetails
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            message: "Error in Get Products Callback",
+            success: false,
+            error
+        })
+    }
+}
+//add product
+exports.addProductController = async (req, res) => {
+    console.log("Image Path", req.file.path);
+    try {
+        const productName = req.body.productName;
+        const productPrice = req.body.productPrice;
+        const productType = req.body.productType;
+        const poductImage = req.file.path;
+        // Validation --- if(!productName || !productPrice)
+        if (!productName) {
+            return res.status(400).send({
+                success: false,
+                message: "Please fill all fields"
+            })
+        }
+        // Save new user
+        const productDetails = new productModel({ productName, productPrice, productType, poductImage });
+        await productDetails.save();
+        return res.status(201).send({
+            success: true,
+            message: 'New Product Details Added Successfully.',
+            productDetails
+        })
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            message: "Error in Add Product Callback",
+            success: false,
+            error
+
+        })
+    }
+}
+//update the product
+exports.updateProductController = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { productName, productPrice, productType, poductImage } = req.body;
+        // Save new user
+        const productDetails = await productModel.findByIdAndUpdate(id, { ...req.body }, { new: true });
+        await productDetails.save();
+        return res.status(201).send({
+            success: true,
+            message: 'Product Details are updated Successfully.',
+            productDetails
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            message: "Error in Update Product Callback",
+            success: false,
+            error
+        })
+    }
+}
+//get the single product
+exports.getSingleProductByIDController = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const singleProductDetail = await productModel.findById(id);
+        //Validation
+        if (!singleProductDetail) {
+            return res.status(404).send({
+                success: false,
+                message: 'Product is not available with this ID.'
+            })
+        }
+        return res.status(200).send({
+            success: true,
+            message: "Single Product details are here.",
+            singleProductDetail
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            message: "Error in Single Get Product Callback",
+            success: false,
+            error
+        })
+    }
+}
+//delete the provider
+exports.deleteProductByIDController = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const deleteProductDetails = await productModel.findByIdAndDelete(id);
+        //Validation
+        if (!deleteProductDetails) {
+            return res.status(404).send({
+                success: false,
+                message: 'Product is not available with this ID.'
+            })
+        }
+        return res.status(200).send({
+            success: true,
+            message: "Product is successfully deleted with this ID.",
+            deleteProductDetails
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            message: "Error in Single Get Product Callback",
+            success: false,
+            error
+        })
+    }
+}
+
+// =============================
+// *  TICKETS APIs CONTROLLER  *
+// =============================
+//get all tickets
+exports.getAllTicketsController = async (req, res) => {
+    try {
+        const allTicketsDetails = await ticketModel.find({});
+        return res.status(200).send({
+            userCount: allTicketsDetails.length,
+            success: true,
+            message: "All Ticket details are here.",
+            allTicketsDetails
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            message: "Error in Get Tickets Callback",
+            success: false,
+            error
+        })
+    }
+}
+//add ticket
+exports.addTicketController = async (req, res) => {
+    console.log("Image Path", req.file.path);
+    try {
+        const ticketTitle = req.body.ticketTitle;
+        const ticketType = req.body.ticketType;
+        const dateOfRaisedTicket = req.body.dateOfRaisedTicket;
+        const ticketDescription = req.body.ticketDescription;
+        const ticketIssueProofImage = req.file.path;
+        // Validation --- if(!productName || !ticketType)
+        if (!ticketTitle) {
+            return res.status(400).send({
+                success: false,
+                message: "Please fill all fields"
+            })
+        }
+        // Save new user
+        const ticketDetails = new ticketModel({ ticketTitle, ticketType, dateOfRaisedTicket, ticketDescription, ticketIssueProofImage });
+        await ticketDetails.save();
+        return res.status(201).send({
+            success: true,
+            message: 'New Ticket Details Added Successfully.',
+            ticketDetails
+        })
+
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            message: "Error in Add Ticket Callback",
+            success: false,
+            error
+
+        })
+    }
+}
+//update the ticket
+exports.updateTicketController = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { ticketTitle, ticketType, dateOfRaisedTicket, ticketDescription, ticketIssueProofImage } = req.body;
+        // Save new user
+        const ticketDetails = await ticketModel.findByIdAndUpdate(id, { ...req.body }, { new: true });
+        await ticketDetails.save();
+        return res.status(201).send({
+            success: true,
+            message: 'Ticket Details are updated Successfully.',
+            ticketDetails
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            message: "Error in Update Ticket Callback",
+            success: false,
+            error
+        })
+    }
+}
+//get the single ticket
+exports.getSingleTicketByIDController = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const singleTicketDetail = await ticketModel.findById(id);
+        //Validation
+        if (!singleTicketDetail) {
+            return res.status(404).send({
+                success: false,
+                message: 'Ticket is not available with this ID.'
+            })
+        }
+        return res.status(200).send({
+            success: true,
+            message: "Single Ticket details are here.",
+            singleTicketDetail
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            message: "Error in Single Get Ticket Callback",
+            success: false,
+            error
+        })
+    }
+}
+//delete the ticket
+exports.deleteTicketByIDController = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const deleteTicketDetails = await ticketModel.findByIdAndDelete(id);
+        //Validation
+        if (!deleteTicketDetails) {
+            return res.status(404).send({
+                success: false,
+                message: 'Ticket is not available with this ID.'
+            })
+        }
+        return res.status(200).send({
+            success: true,
+            message: "Ticket is successfully deleted with this ID.",
+            deleteTicketDetails
+        })
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send({
+            message: "Error in Single Get Ticket Callback",
+            success: false,
+            error
+        })
+    }
+}
+

@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { Layout, Space, Flex, Card, Breadcrumb, Form, Input, Upload, Button, Select, Table, Popconfirm } from 'antd';
+import { Layout, Space, Flex, Card, Breadcrumb, Form, Input, Upload, Button, Select, Table, Popconfirm, message } from 'antd';
 import { HomeOutlined, BookOutlined, LockOutlined, CloudUploadOutlined, FileImageOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import LHeader from '../../components/Header/LHeader';
 import LFooter from '../../components/Footer/LFooter';
 import FormItemInput from "antd/es/form/FormItemInput";
 import './AddProducts.scss';
+import { useDispatch } from "react-redux";
+import { addProduct, getAllProducts } from "../../features/productDetailsSlice";
 
 
 const { Header, Content, Footer } = Layout;
@@ -31,6 +33,7 @@ const EditableCell = ({ editing, dataIndex, title, record, children, ...restProp
 
 function AddProducts() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   //Editing Data in Form
   const [form] = Form.useForm();
@@ -78,73 +81,87 @@ function AddProducts() {
   }
 
   //Define columns for Table
-  const columns = [{
-    title: "ID",
-    dataIndex: "id",
-    fixed: 'top',
-    width: 50,
-  },
-  {
-    title: "Name",
-    dataIndex: "name",
-    editTable: true,
-    fixed: 'top',
-    width: 250,
-  },
-  {
-    title: "Email",
-    dataIndex: "email",
-    editTable: true,
-    fixed: 'top',
-    width: 200,
-  },
-  {
-    title: "Body",
-    dataIndex: "body",
-    editTable: true,
-    fixed: 'top',
-    width: 500,
-  },
-  {
-    title: "Action",
-    dataIndex: "action",
-    align: "center",
-    fixed: 'top',
-    width: 250,
-    render: (_, record) => {
-      const editable = isEditing(record);
-      return modifiedData.length >= 1 ? (
-        <Space>
-          <Popconfirm
-            title="Are you sure want to delete?"
-            onConfirm={() => handleDelete(record)}>
-            <Button danger icon={<DeleteOutlined />} disabled={editable}></Button>
-          </Popconfirm>
-          {editable ? (
-            <span>
-              <Space>
-                <Button type="primary" onClick={() => saveEdit(record.key)} style={{ marginRight: 2 }} > Save</Button>
-                <Popconfirm title="Are you sure want to Cancel?" onConfirm={() => cancelEdit()}>
-                  <Button danger>Cancel</Button>
-                </Popconfirm>
-              </Space>
-            </span>
-          ) : (
-            <Button ghost type="primary"
-              icon={<EditOutlined />}
-              onClick={() => doEdit(record)} ></Button>
-          )
-          }
-        </Space >
-      ) : null;
-    }
-  }];
+  const columns = [
+    {
+      title: "ID",
+      dataIndex: "_id",
+      fixed: 'top',
+      width: 200,
+    },
+    {
+      title: "Image",
+      dataIndex: "poductImage",
+      editTable: true,
+      align: "center",
+      fixed: 'top',
+      width: 150,
+      render: (_, record) => {
+        return modifiedData.length >= 1 ? (
+          <img src={record.poductImage} width={50} />
+        ) : null;
+      }
+    },
+    {
+      title: "Product Name",
+      dataIndex: "productName",
+      editTable: true,
+      fixed: 'top',
+      width: 150,
+    },
+    {
+      title: "Price",
+      dataIndex: "productPrice",
+      editTable: true,
+      fixed: 'top',
+      width: 150,
+    },
+    {
+      title: "Product Type",
+      dataIndex: "productType",
+      editTable: true,
+      fixed: 'top',
+      width: 150,
+    },
+    {
+      title: "Action",
+      dataIndex: "action",
+      align: "center",
+      fixed: 'top',
+      width: 150,
+      render: (_, record) => {
+        const editable = isEditing(record);
+        return modifiedData.length >= 1 ? (
+          <Space>
+            <Popconfirm
+              title="Are you sure want to delete?"
+              onConfirm={() => handleDelete(record)}>
+              <Button danger icon={<DeleteOutlined />} disabled={editable}></Button>
+            </Popconfirm>
+            {editable ? (
+              <span>
+                <Space>
+                  <Button type="primary" onClick={() => saveEdit(record.key)} style={{ marginRight: 2 }} > Save</Button>
+                  <Popconfirm title="Are you sure want to Cancel?" onConfirm={() => cancelEdit()}>
+                    <Button danger>Cancel</Button>
+                  </Popconfirm>
+                </Space>
+              </span>
+            ) : (
+              <Button ghost type="primary"
+                icon={<EditOutlined />}
+                onClick={() => doEdit(record)} ></Button>
+            )
+            }
+          </Space >
+        ) : null;
+      }
+    }];
 
   //Load data in Table
   const loadDataInTable = async () => {
     setLoading(true);
-    const response = await axios.get("https://jsonplaceholder.typicode.com/comments");
-    setGridData(response.data);
+    const response = await axios.get("http://localhost:8080/api/v1/product/all-products");
+    setGridData(response.data.allProductsDetails);
     setLoading(false);
   }
 
@@ -184,9 +201,46 @@ function AddProducts() {
   });
 
   //value is coming in console but...
-  const handleSubmit = async (values) => {
-    console.log({ values });
+  //Notification Code
+  const [messageApi, contextHolder] = message.useMessage();
+
+  const success = () => {
+    messageApi.open({
+      type: 'success',
+      content: 'Provider is added Successfully',
+    });
+  };
+
+  const error = () => {
+    messageApi.open({
+      type: 'error',
+      content: 'Something went wrong!',
+    });
+  };
+
+
+  //value is coming in console but...
+  const handleSubmit = (values) => {
+    try {
+      console.log({ values });
+      const formData = new FormData();
+      formData.append('productName', values.productName);
+      formData.append('productPrice', values.productPrice);
+      formData.append('productType', values.productType);
+      formData.append('poductImage', values.poductImage.file.originFileObj);
+      dispatch(addProduct(formData));
+      success();
+    }
+    catch (error) {
+      console.warn("#Error", error);
+      error(error);
+    }
+
   }
+
+  useEffect(() => {
+    dispatch(getAllProducts());
+  }, [dispatch]);
 
   return (
     <>

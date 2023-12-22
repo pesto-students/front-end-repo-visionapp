@@ -2,12 +2,14 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import dayjs from 'dayjs';
-import { Layout, Space, Flex, Card, Breadcrumb, Form, Input, Upload, Button, Select, Table, Popconfirm, DatePicker } from 'antd';
-import { HomeOutlined, BookOutlined, LockOutlined, CloudUploadOutlined, FileImageOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { Layout, Space, Flex, Card, Breadcrumb, Form, Input, Upload, Button, Select, Table, Popconfirm, DatePicker, message } from 'antd';
+import { HomeOutlined, BookOutlined, LockOutlined, CloudUploadOutlined, FileImageOutlined, DeleteOutlined, EditOutlined, ScheduleOutlined } from '@ant-design/icons';
 import LHeader from '../../components/Header/LHeader';
 import LFooter from '../../components/Footer/LFooter';
 import FormItemInput from "antd/es/form/FormItemInput";
 import './RaiseTicket.scss';
+import { useDispatch } from "react-redux";
+import { addTicket, getAllTickets } from "../../features/ticketDetailsSlice";
 
 
 const { Header, Content, Footer } = Layout;
@@ -32,6 +34,7 @@ const EditableCell = ({ editing, dataIndex, title, record, children, ...restProp
 
 function RaiseTicket() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   //Editing Data in Form
   const [form] = Form.useForm();
@@ -79,73 +82,94 @@ function RaiseTicket() {
   }
 
   //Define columns for Table
-  const columns = [{
-    title: "ID",
-    dataIndex: "id",
-    fixed: 'top',
-    width: 50,
-  },
-  {
-    title: "Name",
-    dataIndex: "name",
-    editTable: true,
-    fixed: 'top',
-    width: 250,
-  },
-  {
-    title: "Email",
-    dataIndex: "email",
-    editTable: true,
-    fixed: 'top',
-    width: 200,
-  },
-  {
-    title: "Body",
-    dataIndex: "body",
-    editTable: true,
-    fixed: 'top',
-    width: 500,
-  },
-  {
-    title: "Action",
-    dataIndex: "action",
-    align: "center",
-    fixed: 'top',
-    width: 250,
-    render: (_, record) => {
-      const editable = isEditing(record);
-      return modifiedData.length >= 1 ? (
-        <Space>
-          <Popconfirm
-            title="Are you sure want to delete?"
-            onConfirm={() => handleDelete(record)}>
-            <Button danger icon={<DeleteOutlined />} disabled={editable}></Button>
-          </Popconfirm>
-          {editable ? (
-            <span>
-              <Space>
-                <Button type="primary" onClick={() => saveEdit(record.key)} style={{ marginRight: 2 }} > Save</Button>
-                <Popconfirm title="Are you sure want to Cancel?" onConfirm={() => cancelEdit()}>
-                  <Button danger>Cancel</Button>
-                </Popconfirm>
-              </Space>
-            </span>
-          ) : (
-            <Button ghost type="primary"
-              icon={<EditOutlined />}
-              onClick={() => doEdit(record)} ></Button>
-          )
-          }
-        </Space >
-      ) : null;
-    }
-  }];
+  const columns = [
+    {
+      title: "ID",
+      dataIndex: "_id",
+      fixed: 'top',
+      width: 170,
+    },
+    {
+      title: "Image",
+      dataIndex: "ticketIssueProofImage",
+      editTable: true,
+      align: "center",
+      fixed: 'top',
+      width: 70,
+      render: (_, record) => {
+        return modifiedData.length >= 1 ? (
+          <img src={record.ticketIssueProofImage} width={50} />
+        ) : null;
+      }
+    },
+    {
+      title: "Title of ticket",
+      dataIndex: "ticketTitle",
+      editTable: true,
+      fixed: 'top',
+      width: 90,
+    },
+    {
+      title: "Ticket Type",
+      dataIndex: "ticketType",
+      editTable: true,
+      fixed: 'top',
+      width: 70,
+    },
+    {
+      title: "Raised date",
+      dataIndex: "dateOfRaisedTicket",
+      editTable: true,
+      fixed: 'top',
+      width: 170,
+    },
+    {
+      title: "Description",
+      dataIndex: "ticketDescription",
+      editTable: true,
+      fixed: 'top',
+      width: 200,
+    },
+    {
+      title: "Action",
+      dataIndex: "action",
+      align: "center",
+      fixed: 'top',
+      width: 100,
+      render: (_, record) => {
+        const editable = isEditing(record);
+        return modifiedData.length >= 1 ? (
+          <Space>
+            <Popconfirm
+              title="Are you sure want to delete?"
+              onConfirm={() => handleDelete(record)}>
+              <Button danger icon={<DeleteOutlined />} disabled={editable}></Button>
+            </Popconfirm>
+            {editable ? (
+              <span>
+                <Space>
+                  <Button type="primary" onClick={() => saveEdit(record.key)} style={{ marginRight: 2 }} > Save</Button>
+                  <Popconfirm title="Are you sure want to Cancel?" onConfirm={() => cancelEdit()}>
+                    <Button danger>Cancel</Button>
+                  </Popconfirm>
+                </Space>
+              </span>
+            ) : (
+              <Button ghost type="primary"
+                icon={<EditOutlined />}
+                onClick={() => doEdit(record)} ></Button>
+            )
+            }
+          </Space >
+        ) : null;
+      }
+    }];
 
   //Load data in Table
   const loadDataInTable = async () => {
     setLoading(true);
-    const response = await axios.get("https://jsonplaceholder.typicode.com/comments");
-    setGridData(response.data);
+    const response = await axios.get("http://localhost:8080/api/v1/ticket/all-tickets");
+    setGridData(response.data.allTicketsDetails);
     setLoading(false);
   }
 
@@ -185,9 +209,48 @@ function RaiseTicket() {
   });
 
   //value is coming in console but...
-  const handleSubmit = async (values) => {
-    console.log({ values });
+  //Notification Code
+  const [messageApi, contextHolder] = message.useMessage();
+
+  const success = () => {
+    messageApi.open({
+      type: 'success',
+      content: 'Provider is added Successfully',
+    });
+  };
+
+  const error = () => {
+    messageApi.open({
+      type: 'error',
+      content: 'Something went wrong!',
+    });
+  };
+
+
+  //value is coming in console but...
+  const handleSubmit = (values) => {
+    try {
+      console.log({ values });
+      const formData = new FormData();
+      formData.append('ticketTitle', values.ticketTitle);
+      formData.append('ticketType', values.ticketType);
+      formData.append('dateOfRaisedTicket', values.dateOfRaisedTicket);
+      formData.append('ticketDescription', values.ticketDescription);
+      formData.append('ticketIssueProofImage', values.ticketIssueProofImage.file.originFileObj);
+      dispatch(addTicket(formData));
+      success();
+    }
+    catch (error) {
+      console.warn("#Error", error);
+      error(error);
+    }
+
   }
+
+  // useEffect(() => {
+  //   dispatch(getAllTickets());
+  // }, [dispatch]);
+
 
   return (
     <>
@@ -217,7 +280,7 @@ function RaiseTicket() {
                       <Input
                         className='formInput'
                         placeholder="Enter Title of Ticket"
-                        prefix={<b>&#8377;</b>} />
+                        prefix={<ScheduleOutlined />} />
                     </Form.Item>
 
                     <Form.Item
