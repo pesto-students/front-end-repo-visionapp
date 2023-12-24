@@ -53,18 +53,11 @@ function Signup() {
     // try {
     console.log("#Registering the User.")
     //Below code will register the user details
-    // await firebase.registerUserDetails(username, email, password, dob, gender);
-
-
-    // await firebase.registerUserDetails(username, email, password, gender);
     await firebase.registerUserDetails(values.username, values.email, values.password, moment(values.dob[0]).format('DD-MM-YYYY'), values.gender, values.profileImage.file.originFileObj);
 
-
     //Below code will register the Email and password in Authentication Mode.
-
-
-    // await firebase.registerUserWithEmailAndPassword(email, password);
     await firebase.registerUserWithEmailAndPassword(values.email, values.password);
+
     success();
 
     navigate('/signin');

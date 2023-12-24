@@ -43,6 +43,18 @@ function Signin() {
       setEmail("");
       setPassword("");
 
+      if (firebase.isLoggedIn && firebase.isAdmin) {
+        navigate('/dashboard');
+
+        console.log("#Admin", firebase.isAdmin)
+      }
+
+      if (firebase.isLoggedIn && !firebase.isAdmin) {
+        navigate('/dashboardUser');
+        console.log("#NotanAdmin", firebase.isAdmin)
+
+      }
+
       // navigate('/dashboard');
     }
     catch (error) {
@@ -51,22 +63,12 @@ function Signin() {
     }
   }
 
-  useEffect(() => {
-    // if (firebase.isLoggedIn) {
-    //   navigate('/dashboard');
-    // }
-    if (firebase.isLoggedIn && firebase.isAdmin) {
-      navigate('/dashboard');
+  // useEffect(() => {
+  //   // if (firebase.isLoggedIn) {
+  //   //   navigate('/dashboard');
+  //   // }
 
-      console.log("#Admin", firebase.isAdmin)
-    }
-
-    if (firebase.isLoggedIn && !firebase.isAdmin) {
-      navigate('/dashboardUser');
-      console.log("#NotanAdmin", firebase.isAdmin)
-
-    }
-  }, [firebase, navigate]);
+  // }, [firebase, navigate]);
 
   return (
     <div className="App">
