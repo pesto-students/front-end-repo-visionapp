@@ -61,22 +61,19 @@ export const FirebaseProvider = (props) => {
     })
 
     const isLoggedIn = user ? true : false;
-    const isAdmin = user?.email === "joe@gmail.com" ? true : false;
+    const isAdmin = user?.email === "pesto@gmail.com" ? true : false;
 
-    // const registerUserDetails = async(username, email, password, confirmPassword, dob, gender, profileImg) => {
-    // const registerUserDetails = async(username, email, password, confirmPassword, dob, gender) => {
-    // const registerUserDetails = async (username, email, password, dob, gender) => {
-    const registerUserDetails = async (username, email, password, gender) => {
-        // const profileImgRef = ref(storage, `uploads/images/${Date.now()}-${profileImg.username}`);
-        // const uploadResult = await uploadBytes(profileImgRef, profileImg);
+    // const registerUserDetails = async (username, email, password, gender) => {
+    const registerUserDetails = async (username, email, password, dob, gender, profileImage) => {
+        const profileImgRef = ref(storage, `uploads/images/${Date.now()}-${username}`);
+        const uploadResult = await uploadBytes(profileImgRef, profileImage);
         return await addDoc(collection(firestore, 'profiles'), {
             username,
             email,
             password,
-            // confirmPassword,
-            // dob,
+            dob,
             gender,
-            // profileImg : uploadResult.ref.fullPath,
+            profileImage: uploadResult.ref.fullPath,
         })
     };
 

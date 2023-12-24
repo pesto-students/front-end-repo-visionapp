@@ -6,6 +6,7 @@ import { UserOutlined, LockOutlined, MailOutlined, CloudUploadOutlined, GoogleOu
 import LFooter from '../../components/Footer/LFooter';
 import { useFirebase } from "../../context/Firebase";
 import { useEffect, useState } from "react";
+import moment from 'moment';
 
 const { Header, Content, Footer } = Layout;
 
@@ -45,27 +46,33 @@ function Signup() {
   //   console.log({values});
   //  }
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (values) => {
+    console.log("#SignUp Values :- ", values)
+    // console.log("#SignUp DOB :- ", moment(values.dob[0]).format('DD-MM-YYYY'));
     // e.preventDefault();
-    try {
-      console.log("#Registering the User.")
-      //Below code will register the user details
-      // await firebase.registerUserDetails(username, email, password, confirmPassword, gender, profileImg)
-      // await firebase.registerUserDetails(username, email, password, confirmPassword, dob, gender);
-      // await firebase.registerUserDetails(username, email, password, dob, gender);
-      await firebase.registerUserDetails(username, email, password, gender);
-      //Below code will register the Email and password in Authentication Mode.
-      await firebase.registerUserWithEmailAndPassword(email, password);
-      success();
-      console.log("#User is registrated");
-      setEmail("");
-      setPassword("");
-      navigate('/signin');
-    }
-    catch (error) {
-      console.warn("#Signup Error", error);
-      error(error);
-    }
+    // try {
+    console.log("#Registering the User.")
+    //Below code will register the user details
+    // await firebase.registerUserDetails(username, email, password, dob, gender);
+
+
+    // await firebase.registerUserDetails(username, email, password, gender);
+    await firebase.registerUserDetails(values.username, values.email, values.password, moment(values.dob[0]).format('DD-MM-YYYY'), values.gender, values.profileImage.file.originFileObj);
+
+
+    //Below code will register the Email and password in Authentication Mode.
+
+
+    // await firebase.registerUserWithEmailAndPassword(email, password);
+    await firebase.registerUserWithEmailAndPassword(values.email, values.password);
+    success();
+
+    navigate('/signin');
+    // }
+    // catch (error) {
+    //   console.warn("#Signup Error", error);
+    //   error(error);
+    // }
   }
 
   // useEffect(() => {
@@ -186,12 +193,11 @@ function Signup() {
                       hasFeedback>
                       <DatePicker
                         picker="date"
-                        // onChange={(e) => setDob(e.target.value)}
                         defaultValue={dayjs('01/01/2015', 'DD/MM/YYYY')} format={"DD/MM/YYYY"}
-                        onChange={(date, dateString) => {
-                          console.log(dateString); setDob(date, dateString);
-                        }}
-                        value={dob}
+                      // onChange={(date, dateString) => {
+                      //   console.log(dateString); setDob(date, dateString);
+                      // }}
+                      // value={dob}
                       // name={dob} 
                       />
                     </Form.Item>
@@ -215,21 +221,16 @@ function Signup() {
                       </Radio.Group>
                     </Form.Item>
 
-                    {/* <Form.Item className='formUpload' valuePropName="fileList"> */}
-                    {/* <Form.Item className='formUpload'>
+                    <Form.Item name="profileImage" className='formUpload'>
                       <Upload htmltype="file"
-                        fileList={profileImg}
-                        onChange={(e) => setProfileImg(e.target.files[0])}
-                        value={profileImg}
-                        name={profileImg}
-                        action="/upload.do"
-                        listType="picture-card">
+                        action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
+                        listType="picture">
                         <div>
                           <CloudUploadOutlined />
                           <div style={{ marginTop: 8 }}>Upload</div>
                         </div>
                       </Upload>
-                    </Form.Item> */}
+                    </Form.Item>
 
                     <Form.Item>
                       <Button className='formButton' htmlType="submit">Sign Up</Button>
