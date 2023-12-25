@@ -34,7 +34,9 @@ export const productDetailsSlice = createSlice({
   name: "productDetailsSlice",
   initialState: {
     products: [],
-    allCart: [],
+    allCart: localStorage.getItem("allCart")
+      ? JSON.parse(localStorage.getItem("allCart"))
+      : [],
     totalQuantity: 0,
     totalPrice: 0,
     loading: false,
@@ -48,6 +50,7 @@ export const productDetailsSlice = createSlice({
       } else {
         state.allCart.push(action.payload);
       }
+      localStorage.setItem("allCart", JSON.stringify(state.allCart));
     },
 
     getCartTotal: (state) => {
@@ -69,10 +72,14 @@ export const productDetailsSlice = createSlice({
       );
       state.totalPrice = parseInt(totalPrice.toFixed(2));
       state.totalQuantity = totalQuantity;
+      localStorage.setItem("allCart", JSON.stringify(state.allCart));
+
     },
 
     removeItem: (state, action) => {
       state.allCart = state.allCart.filter((item) => item._id !== action.payload);
+      localStorage.setItem("allCart", JSON.stringify(state.allCart));
+
     },
 
     increaseItemQuantity: (state, action) => {
@@ -82,14 +89,18 @@ export const productDetailsSlice = createSlice({
         }
         return item;
       });
+      localStorage.setItem("allCart", JSON.stringify(state.allCart));
+
     },
     decreaseItemQuantity: (state, action) => {
       state.allCart = state.allCart.map((item) => {
-        if (item._id === action.payload) {
+        if (item._id === action.payload && item.productQuantity != 1) {
           return { ...item, productQuantity: item.productQuantity - 1 };
         }
         return item;
       });
+      localStorage.setItem("allCart", JSON.stringify(state.allCart));
+
     },
   },
   extraReducers: (builder) => {

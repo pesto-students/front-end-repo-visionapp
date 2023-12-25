@@ -82,7 +82,7 @@ function HomemadeProducts() {
                                   description={item.productType}
                                 />
 
-                                <p> Price :- <b>₹ &nbsp; {item.productPrice} </b></p>
+                                <p> Price :- <b>₹&nbsp;{item.productPrice} </b></p>
                                 <Button ghost type="primary" onClick={() => dispatch(addToCart(item))} > ADD TO CART</Button>
                               </Card>
                             </Col>
@@ -113,8 +113,6 @@ function HomemadeProducts() {
                 </div>
                 <div className="rightContainer">
                   <h4> Shopping Cart</h4>
-                  <hr />
-
                   <Row gutter={12}>
                     {allCart?.map((item) => (
                       <>
@@ -138,7 +136,7 @@ function HomemadeProducts() {
                                 } />
                               </div>
                               <div className="price">
-                                <b>{item.productPrice}</b>
+                                <b>₹&nbsp;{item.productPrice}</b>
                                 <label onClick={() => dispatch(removeItem(item._id))}> Remove </label>
                               </div>
                             </div>
@@ -162,7 +160,7 @@ function HomemadeProducts() {
                             <span> {totalQuantity} items</span>
                           </div>
                           <div className="totalP">
-                            <h2> {totalPrice} /-</h2>
+                            <h2> ₹&nbsp;{totalPrice}/-</h2>
                           </div>
                         </div>
                       </Card>
