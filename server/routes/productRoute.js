@@ -27,7 +27,7 @@ const router = express.Router();
 //get method || GET
 router.get('/all-products', getAllProductsController)
 //post method || POST
-router.post('/add-product', upload.single("poductImage"), addProductController)
+router.post('/add-product', upload.single("productImage"), addProductController)
 //update method || PUT
 router.put('/update-product/:id', updateProductController)
 //get method for fetch single detail || GET

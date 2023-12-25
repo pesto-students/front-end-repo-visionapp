@@ -6,7 +6,12 @@ import './HomemadeProducts.scss';
 import LFooter from '../../components/Footer/LFooter';
 import { useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
-import { getAllProducts } from "../../features/productDetailsSlice";
+import {
+  getAllProducts, addToCart, getCartTotal,
+  removeItem,
+  decreaseItemQuantity,
+  increaseItemQuantity,
+} from "../../features/productDetailsSlice";
 
 const { Header, Content, Footer } = Layout;
 const { Meta } = Card;
@@ -22,9 +27,16 @@ function HomemadeProducts() {
     (el) => el.productType == "woodwork", []
   );
 
+  //cart Items
+  const { cartItems, quantity, totalQuantity, totalPrice } = useSelector((state) => state.product);
+
   useEffect(() => {
     dispatch(getAllProducts());
   }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(getCartTotal());
+  }, [cartItems]);
 
   return (
     <>
@@ -54,23 +66,23 @@ function HomemadeProducts() {
                       {!productData.loading && productData.error ? <div>Error : {productData.error} </div> : null}
                       {!productData.loading && productData.products?.data?.allProductsDetails.length ? (
                         <Row gutter={24}>
-                          {woodworkList.map((el, index) => (
+                          {woodworkList.map((item, index) => (
                             <Col span={6}>
                               <Card
                                 bordered={false}
                                 cover={
                                   <img
                                     alt="example"
-                                    src={el.poductImage}
+                                    src={item.productImage}
                                   />
                                 }>
                                 <Meta
-                                  title={el.productName}
-                                  description={el.productType}
+                                  title={item.productName}
+                                  description={item.productType}
                                 />
 
-                                <p> Price :- <b>₹ &nbsp; {el.productPrice} </b></p>
-                                <Button ghost type="primary"> ADD TO CART</Button>
+                                <p> Price :- <b>₹ &nbsp; {item.productPrice} </b></p>
+                                <Button ghost type="primary" onClick={() => dispatch(addToCart(item))} > ADD TO CART</Button>
                               </Card>
                             </Col>
                           ))
@@ -101,53 +113,43 @@ function HomemadeProducts() {
                 <div className="rightContainer">
                   <h4> Shopping Cart</h4>
                   <hr />
+
                   <Row gutter={12}>
-                    <Col span={24}>
-                      <Card
-                        className="shoppingCartBox"
-                        bordered={true}>
-                        <div className="startCart">
-                          <img alt="Review Tickets" src="https://theindiacrafthouse.com/cdn/shop/products/Wooden_Decorative_Jewellery_Box_-_WDJBA_1024x1024@2x.JPG?v=1579729040" width={35} />
-                          <h4> Decorative Utility Box</h4>
-                        </div>
-                        <div className="endCard">
-                          <div className="quantity">
-                            <PlusCircleOutlined />
-                            <p>&nbsp;<b> 1 </b> &nbsp;</p>
-                            <MinusCircleOutlined />
-                          </div>
-                          <div className="price">
-                            <b> 399/-</b>
-                            <a href=""> Remove </a>
-                          </div>
-                        </div>
-                      </Card>
-                    </Col>
+                    {cartItems?.map((item) => (
+                      <>
+                        <Col span={24}>
+                          <Card
+                            key={item._id}
+                            className="shoppingCartBox"
+                            bordered={true}>
+                            <div className="startCart">
+                              <img alt="Review Tickets" src={item.productImage} width={35} />
+                              <h4> {item.productName}</h4>
+                            </div>
+                            <div className="endCard">
+                              <div className="quantity">
+                                <PlusCircleOutlined onClick={() =>
+                                  dispatch(increaseItemQuantity(item._id))
+                                } />
+                                <p>&nbsp;<b>{quantity} </b> &nbsp;</p>
+                                <MinusCircleOutlined onClick={() =>
+                                  dispatch(decreaseItemQuantity(item._id))
+                                } />
+                              </div>
+                              <div className="price">
+                                <b>{item.productPrice}</b>
+                                <a href="" onClick={() => dispatch(removeItem(item._id))}> Remove </a>
+                              </div>
+                            </div>
+                          </Card>
+                        </Col>
+
+                      </>
+                    ))}
                   </Row>
-                  <Row gutter={12}>
-                    <Col span={24}>
-                      <Card
-                        className="shoppingCartBox"
-                        bordered={true}>
-                        <div className="startCart">
-                          <img alt="Review Tickets" src="https://theindiacrafthouse.com/cdn/shop/products/Wooden_Decorative_Jewellery_Box_-_WDJBA_1024x1024@2x.JPG?v=1579729040" width={35} />
-                          <h4> Decorative Utility Box</h4>
-                        </div>
-                        <div className="endCard">
-                          <div className="quantity">
-                            <PlusCircleOutlined />
-                            <p>&nbsp;<b> 1 </b> &nbsp;</p>
-                            <MinusCircleOutlined />
-                          </div>
-                          <div className="price">
-                            <b> 399/-</b>
-                            <a href=""> Remove </a>
-                          </div>
-                        </div>
-                      </Card>
-                    </Col>
-                  </Row>
+
                   <hr />
+
                   <Row gutter={12}>
                     <Col span={24}>
                       <Card
@@ -156,17 +158,15 @@ function HomemadeProducts() {
                         <div className="totalAmount">
                           <div className="totalQ">
                             <p> <strong> Sub-total : </strong> </p>
-                            <span> 2 items</span>
+                            <span> {totalQuantity} items</span>
                           </div>
                           <div className="totalP">
-                            <h2> 798/-</h2>
+                            <h2> {totalPrice} /-</h2>
                           </div>
                         </div>
                       </Card>
                     </Col>
-                  </Row>
-                  <hr />
-                  <Row gutter={12}>
+
                     <Col span={24}>
                       <Button className="checkItOut"> CHECKOUT </Button>
                     </Col>

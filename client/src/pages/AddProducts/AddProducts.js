@@ -294,9 +294,9 @@ function AddProducts() {
                       </Select>
                     </Form.Item>
 
-                    <Form.Item name="poductImage">
+                    <Form.Item name="productImage">
                       <Upload
-                        action="/upload.do"
+                        action="https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188"
                         listType="picture"
                         maxCount={1}
                         // onChange={(e) => setPostImage(e.target.files[0])}
