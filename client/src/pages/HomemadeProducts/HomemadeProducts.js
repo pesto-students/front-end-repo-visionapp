@@ -7,10 +7,7 @@ import LFooter from '../../components/Footer/LFooter';
 import { useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  getAllProducts, addToCart, getCartTotal,
-  removeItem,
-  decreaseItemQuantity,
-  increaseItemQuantity,
+  getAllProducts, addToCart, getCartTotal, removeItem, increaseItemQuantity, decreaseItemQuantity
 } from "../../features/productDetailsSlice";
 
 const { Header, Content, Footer } = Layout;
@@ -28,7 +25,9 @@ function HomemadeProducts() {
   );
 
   //cart Items
-  const { cartItems, quantity, totalQuantity, totalPrice } = useSelector((state) => state.product);
+  const { allCart, totalQuantity, totalPrice } = useSelector((state) => state.product);
+  console.log("#Cart", allCart);
+
 
   useEffect(() => {
     dispatch(getAllProducts());
@@ -36,7 +35,8 @@ function HomemadeProducts() {
 
   useEffect(() => {
     dispatch(getCartTotal());
-  }, [cartItems]);
+  }, [allCart]);
+
 
   return (
     <>
@@ -69,6 +69,7 @@ function HomemadeProducts() {
                           {woodworkList.map((item, index) => (
                             <Col span={6}>
                               <Card
+                                key={item._id}
                                 bordered={false}
                                 cover={
                                   <img
@@ -115,7 +116,7 @@ function HomemadeProducts() {
                   <hr />
 
                   <Row gutter={12}>
-                    {cartItems?.map((item) => (
+                    {allCart?.map((item) => (
                       <>
                         <Col span={24}>
                           <Card
@@ -131,14 +132,14 @@ function HomemadeProducts() {
                                 <PlusCircleOutlined onClick={() =>
                                   dispatch(increaseItemQuantity(item._id))
                                 } />
-                                <p>&nbsp;<b>{quantity} </b> &nbsp;</p>
+                                <p>&nbsp;<b>{item.productQuantity} </b> &nbsp;</p>
                                 <MinusCircleOutlined onClick={() =>
                                   dispatch(decreaseItemQuantity(item._id))
                                 } />
                               </div>
                               <div className="price">
                                 <b>{item.productPrice}</b>
-                                <a href="" onClick={() => dispatch(removeItem(item._id))}> Remove </a>
+                                <label onClick={() => dispatch(removeItem(item._id))}> Remove </label>
                               </div>
                             </div>
                           </Card>

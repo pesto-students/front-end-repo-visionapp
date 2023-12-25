@@ -6,7 +6,7 @@ const productScheme = new mongoose.Schema({
         required: [true, 'Name is required.']
     },
     productPrice: {
-        type: String,
+        type: Number,
         // required: [true, 'Number is required.']
     },
     productType: {
@@ -16,8 +16,14 @@ const productScheme = new mongoose.Schema({
     productImage: {
         type: String,
         // required: true
+    },
+    productQuantity: {
+        type: Number
     }
 }, { timestamps: true });
+
+productScheme.path('productQuantity')
+    .default(1)
 
 const productModel = mongoose.model("Product", productScheme);
 
