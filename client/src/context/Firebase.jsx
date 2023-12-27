@@ -44,6 +44,7 @@ const googleAuthProvider = new GoogleAuthProvider();
 const facebookAuthProvider = new FacebookAuthProvider();
 // instance of Firestore
 const firestore = getFirestore(firebaseApp);
+export { firestore };
 // instance of storage
 const storage = getStorage(firebaseApp);
 
