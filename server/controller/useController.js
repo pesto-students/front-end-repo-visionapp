@@ -2,6 +2,7 @@ const postModel = require("../models/postModel");
 const productModel = require("../models/productModel");
 const providerModel = require("../models/providerModel");
 const ticketModel = require("../models/ticketModel");
+const cloudinary = require("../helper/cloudinaryConfig");
 
 // =============================
 // *  PROSTS APIs CONTROLLER  *
@@ -29,7 +30,10 @@ exports.getAllPostsController = async (req, res) => {
 exports.createPostController = async (req, res) => {
     try {
         const postDescription = req.body.postDescription;
-        const postUploadImage = req.file.path;
+        // const postUploadImage = req.file.path;
+        const upload = await cloudinary.uploader.upload(req.file.path);
+        const postUploadImage = upload.secure_url;
+        // console.log("#Cloudinary_FILE", postUploadImage);
         // Validation --- if(!postDescription || !email)
         if (!postDescription) {
             return res.status(400).send({
@@ -160,7 +164,9 @@ exports.addProviderController = async (req, res) => {
         const providerNumber = req.body.providerNumber;
         const providerServiceType = req.body.providerServiceType;
         const providerLocation = req.body.providerLocation;
-        const providerImage = req.file.path;
+        // const providerImage = req.file.path;
+        const upload = await cloudinary.uploader.upload(req.file.path);
+        const providerImage = upload.secure_url;
         // Validation --- if(!providerName || !providerNumber)
         if (!providerName) {
             return res.status(400).send({
@@ -291,7 +297,9 @@ exports.addProductController = async (req, res) => {
         const productName = req.body.productName;
         const productPrice = req.body.productPrice;
         const productType = req.body.productType;
-        const productImage = req.file.path;
+        // const productImage = req.file.path;
+        const upload = await cloudinary.uploader.upload(req.file.path);
+        const productImage = upload.secure_url;
         // Validation --- if(!productName || !productPrice)
         if (!productName) {
             return res.status(400).send({
@@ -423,7 +431,9 @@ exports.addTicketController = async (req, res) => {
         const ticketType = req.body.ticketType;
         const dateOfRaisedTicket = req.body.dateOfRaisedTicket;
         const ticketDescription = req.body.ticketDescription;
-        const ticketIssueProofImage = req.file.path;
+        // const ticketIssueProofImage = req.file.path;
+        const upload = await cloudinary.uploader.upload(req.file.path);
+        const ticketIssueProofImage = upload.secure_url;
         // Validation --- if(!productName || !ticketType)
         if (!ticketTitle) {
             return res.status(400).send({

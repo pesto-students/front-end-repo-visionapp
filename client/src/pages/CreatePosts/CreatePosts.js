@@ -96,7 +96,7 @@ function CreatePosts() {
 
                 {postData.loading && <div>Loading </div>}
                 {!postData.loading && postData.error ? <div>Error : {postData.error} </div> : null}
-                {!postData.loading && postData.posts?.data?.allPostDetails.length ? (
+                {!postData.loading && postData.posts?.data?.allPostDetails ? (
                   <div>
                     {
                       postData?.posts?.data?.allPostDetails.map((el, index) => (
