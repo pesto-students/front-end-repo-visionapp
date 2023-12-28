@@ -4,9 +4,9 @@ const multer = require('multer');
 
 // Image storage path
 const storage = multer.diskStorage({
-    destination: (req, file, callback) => {
-        callback(null, "./uploads")
-    },
+    // destination: (req, file, callback) => {
+    //     callback(null, "./uploads")
+    // },
     filename: (req, file, callback) => {
         callback(null, `image-${Date.now()}.${file.originalname}`)
     }
