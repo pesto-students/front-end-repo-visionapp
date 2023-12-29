@@ -9,6 +9,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import {
   getAllProducts, addToCart, getCartTotal, removeItem, increaseItemQuantity, decreaseItemQuantity
 } from "../../features/productDetailsSlice";
+import axios from "axios";
 
 const { Header, Content, Footer } = Layout;
 const { Meta } = Card;
@@ -36,6 +37,35 @@ function HomemadeProducts() {
   useEffect(() => {
     dispatch(getCartTotal());
   }, [allCart]);
+
+  const checkouthandler = async (totalPrice) => {
+    const { data: { order } } = await axios.post("http://localhost:8080/api/v1/razorpay/checkout", { totalPrice })
+    console.log(window);
+    const options = {
+      key: "rzp_test_CLCb3MHpT7PJRC",
+      amount: order.totalPrice,
+      currency: "INR",
+      name: "Yashkumar Jani",
+      description: "Razorpay tutorial",
+      image: "https://media.licdn.com/dms/image/D4D03AQG9pYZy3A0FJQ/profile-displayphoto-shrink_200_200/0/1698504476531?e=2147483647&v=beta&t=R7rIJLCYeprEwZqlgWugwQr0yTAwF71ds9oO_VKiqI8",
+      order_id: order.id,
+      callback_url: "http://localhost:8080/api/v1/razorpay/payment-verification",
+      prefill: {
+        name: "Yashkumar Jani",
+        email: "eryashkumarjani@gmail.com",
+        contact: "8320870517"
+      },
+      notes: {
+        "address": "Babra 🙏 State"
+      },
+      theme: {
+        "color": "#3399cc"
+      }
+    };
+    const razor = new window.Razorpay(options);
+    razor.open();
+
+  }
 
 
   return (
@@ -167,7 +197,7 @@ function HomemadeProducts() {
                     </Col>
 
                     <Col span={24}>
-                      <Button className="checkItOut"> CHECKOUT </Button>
+                      <Button className="checkItOut" onClick={() => checkouthandler(totalPrice)}> CHECKOUT </Button>
                     </Col>
                   </Row>
                   <h4></h4>

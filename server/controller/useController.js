@@ -3,6 +3,12 @@ const productModel = require("../models/productModel");
 const providerModel = require("../models/providerModel");
 const ticketModel = require("../models/ticketModel");
 const cloudinary = require("../helper/cloudinaryConfig");
+const Razorpay = require("razorpay");
+const crypto = require("crypto")
+const instance = new Razorpay({
+    key_id: process.env.RAZORPAY_KEY_ID,
+    key_secret: process.env.RAZORPAY_SECRET_KEY
+})
 
 // =============================
 // *  PROSTS APIs CONTROLLER  *
@@ -535,3 +541,36 @@ exports.deleteTicketByIDController = async (req, res) => {
     }
 }
 
+// =============================
+// *  RAZORPAY APIs CONTROLLER  *
+// =============================
+
+//doCheckout
+exports.doCheckout = async (req, res) => {
+    const options = {
+        amount: Number(req.body.totalPrice * 100),
+        currency: "INR",
+    };
+    const order = await instance.orders.create(options);
+    console.log(order);
+
+    res.status(200).json({
+        success: true, order
+    })
+}
+
+exports.doPaymentVerification = async (req, res) => {
+    const { razorpayOrderID, razorpayPaymentID, razorpaySignature } = req.body;
+    const body = razorpayOrderID + "|" + razorpayPaymentID;
+    const expectedsignature = crypto.createHmac('sha256', process.env.RAZORPAY_SECRET_KEY).update(body.toString()).digest('hex')
+    const isauth = expectedsignature === razorpaySignature;
+    if (isauth) {
+        await Payment.create({
+            razorpayOrderID, razorpayPaymentID, razorpaySignature
+        })
+        res.redirect(`http://localhost:3000/paymentSuccess?reference=${razorpayPaymentID}`)
+    }
+    else {
+        res.status(400).json({ success: false });
+    }
+}

@@ -29,7 +29,7 @@ import HomemadeProducts from './pages/HomemadeProducts/HomemadeProducts';
 import ServiceProviders from './pages/ServiceProviders/ServiceProviders';
 import DashboardUser from './pages/DashboardUser/DashboardUser';
 import ViewPosts from './pages/ViewPosts/ViewPosts';
-
+import PaymentSuccess from './pages/PaymentSuccess/PaymentSuccess';
 
 const router = createBrowserRouter([
   {
@@ -99,6 +99,10 @@ const router = createBrowserRouter([
   {
     path: "/viewPosts",
     element: <ViewPosts />,
+  },
+  {
+    path: "/paymentSuccess",
+    element: <PaymentSuccess />,
   },
   {
     path: "*",
