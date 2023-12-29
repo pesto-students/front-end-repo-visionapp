@@ -19,6 +19,8 @@ function ServiceProviders() {
 
   const providerData = useSelector((state) => state.provider);
 
+  console.log("PROVIDER_DATA", providerData)
+
   //Filter Tutor providers from APIs
   const tutorList = providerData?.providers?.data?.allProvidersDetails.filter(
     (el) => el.providerServiceType == "tutor",
@@ -88,7 +90,8 @@ function ServiceProviders() {
                                     description={el.providerServiceType}
                                   />
                                   <h5> Location :- <b>{el.providerLocation}. </b></h5>
-                                  <Button type="primary" onClick={() => setOpen(true)}> View Detail</Button>
+                                  {/* <Button type="primary" onClick={() => setOpen(true)}> View Detail</Button> */}
+                                  <a href={`https://wa.me/91${el.providerNumber}`} > CHAT</a>
                                 </Card>
                               </Col>
                             ))
@@ -96,7 +99,7 @@ function ServiceProviders() {
                         </Row>
 
                       ) : null}
-                      <Modal
+                      {/* <Modal
                         title="Details of Service Provider"
                         centered
                         open={open}
@@ -125,7 +128,7 @@ function ServiceProviders() {
                             </div>
                           </Col>
                         </Row>
-                      </Modal>
+                      </Modal> */}
                     </Tabs.TabPane>
                     <Tabs.TabPane tab="Stationery" key="tab2">
                       {providerData.loading && <div>Loading </div>}
