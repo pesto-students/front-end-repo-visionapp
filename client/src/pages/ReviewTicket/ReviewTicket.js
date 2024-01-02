@@ -47,15 +47,16 @@ function ReviewTicket() {
                 {!ticketData.loading && ticketData.tickets?.data?.allTicketsDetails.length ? (
                   <Row gutter={24}>
                     {ticketData.tickets?.data?.allTicketsDetails.map((el, index) => (
-                      <Col span={6} >
+                      <Col className="colWidth" >
                         <div className="insideColumn">
                           <div className="profileImg">
                             <img src={el.ticketIssueProofImage} alt='logo' />
                             <h2> Meet Pandya </h2>
                           </div>
                           <div className="profileMsg">
-                            <p> He has created the ticket for <strong>{el.ticketTitle} </strong> regarding the <b> {el.ticketType} </b> on <b> {el.dateOfRaisedTicket}</b> where the issue is <b> {el.ticketDescription}</b> click on view button to get more details. </p>
-                            <Button type="primary" className="viewBtn" > CHAT</Button>
+                            <p> He has created the ticket for <strong>{el.ticketTitle} </strong> regarding the <b> {el.ticketType} </b> on <b> {el.dateOfRaisedTicket}</b> where the issue is <i> ( {el.ticketDescription})</i> click on chat button to get more details. </p>
+                            {/* <Button type="primary" className="viewBtn" > CHAT</Button> */}
+                            <a className="chatBtn" href={`https://wa.me/91${el.phoneNumberOfUser}`} > CHAT</a>
                           </div>
                         </div>
                       </Col>

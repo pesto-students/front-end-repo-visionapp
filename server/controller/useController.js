@@ -437,6 +437,7 @@ exports.addTicketController = async (req, res) => {
         const ticketType = req.body.ticketType;
         const dateOfRaisedTicket = req.body.dateOfRaisedTicket;
         const ticketDescription = req.body.ticketDescription;
+        const phoneNumberOfUser = req.body.phoneNumberOfUser;
         // const ticketIssueProofImage = req.file.path;
         const upload = await cloudinary.uploader.upload(req.file.path);
         const ticketIssueProofImage = upload.secure_url;
@@ -448,7 +449,7 @@ exports.addTicketController = async (req, res) => {
             })
         }
         // Save new user
-        const ticketDetails = new ticketModel({ ticketTitle, ticketType, dateOfRaisedTicket, ticketDescription, ticketIssueProofImage });
+        const ticketDetails = new ticketModel({ ticketTitle, ticketType, dateOfRaisedTicket, ticketDescription, phoneNumberOfUser, ticketIssueProofImage });
         await ticketDetails.save();
         return res.status(201).send({
             success: true,
@@ -470,7 +471,7 @@ exports.addTicketController = async (req, res) => {
 exports.updateTicketController = async (req, res) => {
     try {
         const { id } = req.params;
-        const { ticketTitle, ticketType, dateOfRaisedTicket, ticketDescription, ticketIssueProofImage } = req.body;
+        const { ticketTitle, ticketType, dateOfRaisedTicket, ticketDescription, phoneNumberOfUser, ticketIssueProofImage } = req.body;
         // Save new user
         const ticketDetails = await ticketModel.findByIdAndUpdate(id, { ...req.body }, { new: true });
         await ticketDetails.save();

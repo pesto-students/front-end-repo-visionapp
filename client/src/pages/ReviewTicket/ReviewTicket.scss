@@ -27,7 +27,9 @@ $layoutOrangeColor : #FF5300;
         }
 
         .reviewTicketContainer {
-
+            .colWidth {
+                width: 25%;
+            }
 
             .insideColumn {
                 // display: flex;
@@ -64,9 +66,29 @@ $layoutOrangeColor : #FF5300;
                         text-align: left;
                         margin-top: 0;
                     }
+
+                    .chatBtn {
+                        width: 100%;
+                        text-align: center;
+                        border-radius: 5px;
+                        padding: 5px;
+                        border: 1px solid #1677ff;
+                    }
                 }
             }
         }
 
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .reviewTicket .mainReviewTicketContentArea .reviewTicketContainer .colWidth {
+        width: 100%;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .reviewTicket .mainReviewTicketContentArea .reviewTicketContainer .colWidth {
+        width: 30%;
     }
 }

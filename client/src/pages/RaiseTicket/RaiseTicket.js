@@ -3,14 +3,14 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import dayjs from 'dayjs';
 import { Layout, Space, Flex, Card, Breadcrumb, Form, Input, Upload, Button, Select, Table, Popconfirm, DatePicker, message } from 'antd';
-import { HomeOutlined, BookOutlined, LockOutlined, CloudUploadOutlined, FileImageOutlined, DeleteOutlined, EditOutlined, ScheduleOutlined } from '@ant-design/icons';
+import { HomeOutlined, BookOutlined, LockOutlined, CloudUploadOutlined, FileImageOutlined, DeleteOutlined, PhoneOutlined, EditOutlined, ScheduleOutlined } from '@ant-design/icons';
 import LHeader from '../../components/Header/LHeader';
 import LFooter from '../../components/Footer/LFooter';
 import FormItemInput from "antd/es/form/FormItemInput";
 import './RaiseTicket.scss';
 import { useDispatch } from "react-redux";
 import { addTicket, getAllTickets } from "../../features/ticketDetailsSlice";
-
+import moment from 'moment';
 
 const { Header, Content, Footer } = Layout;
 const { Meta } = Card;
@@ -121,7 +121,7 @@ function RaiseTicket() {
       dataIndex: "dateOfRaisedTicket",
       editTable: true,
       fixed: 'top',
-      width: 170,
+      width: 80,
     },
     {
       title: "Description",
@@ -129,6 +129,13 @@ function RaiseTicket() {
       editTable: true,
       fixed: 'top',
       width: 200,
+    },
+    {
+      title: "Phone Number",
+      dataIndex: "phoneNumberOfUser",
+      editTable: true,
+      fixed: 'top',
+      width: 90,
     },
     {
       title: "Action",
@@ -234,8 +241,11 @@ function RaiseTicket() {
       const formData = new FormData();
       formData.append('ticketTitle', values.ticketTitle);
       formData.append('ticketType', values.ticketType);
-      formData.append('dateOfRaisedTicket', values.dateOfRaisedTicket);
+      // formData.append('dateOfRaisedTicket', values.dateOfRaisedTicket);
+      // formData.append('dateOfRaisedTicket', moment(values.dateOfRaisedTicket[0]).format('DD-MM-YYYY'));
+      formData.append('dateOfRaisedTicket', moment(values.dateOfRaisedTicket).format('DD-MM-YYYY'));
       formData.append('ticketDescription', values.ticketDescription);
+      formData.append('phoneNumberOfUser', values.phoneNumberOfUser);
       formData.append('ticketIssueProofImage', values.ticketIssueProofImage.file.originFileObj);
       dispatch(addTicket(formData));
       success();
@@ -315,6 +325,13 @@ function RaiseTicket() {
                         prefix={<BookOutlined />} />
                     </Form.Item>
 
+                    <Form.Item name="phoneNumberOfUser">
+                      <Input
+                        className='formInput'
+                        placeholder="Enter your Phone number"
+                        prefix={<PhoneOutlined />} />
+                    </Form.Item>
+
                     <Form.Item name="ticketIssueProofImage">
                       <Upload
                         action="/upload.do"
@@ -326,7 +343,7 @@ function RaiseTicket() {
                         className="formUpload"
                       >
                         <div>
-                          <Button icon={<FileImageOutlined />} style={{ fontWeight: "lighter" }}> Upload Ticket Issue Image</Button>
+                          <Button icon={<FileImageOutlined />} style={{ fontWeight: "lighter" }}> Upload Issue Image</Button>
                         </div>
                       </Upload>
                     </Form.Item>

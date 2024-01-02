@@ -17,6 +17,9 @@ const ticketScheme = new mongoose.Schema({
         type: String,
         // required: [true, 'Service Type is required.']
     },
+    phoneNumberOfUser: {
+        type: String,
+    },
     ticketIssueProofImage: {
         type: String,
         // required: true
