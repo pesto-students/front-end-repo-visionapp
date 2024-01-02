@@ -97,7 +97,8 @@ function HomemadeProducts() {
                       {!productData.loading && productData.products?.data?.allProductsDetails.length ? (
                         <Row gutter={24}>
                           {woodworkList.map((item, index) => (
-                            <Col span={6}>
+                            // <Col span={6}>
+                            <Col className="cartItemBox">
                               <Card
                                 key={item._id}
                                 bordered={false}
@@ -113,7 +114,7 @@ function HomemadeProducts() {
                                 />
 
                                 <p> Price :- <b>₹&nbsp;{item.productPrice} </b></p>
-                                <Button ghost type="primary" onClick={() => dispatch(addToCart(item))} > ADD TO CART</Button>
+                                <Button className="addToCartBtn" ghost type="primary" onClick={() => dispatch(addToCart(item))} > ADD TO CART</Button>
                               </Card>
                             </Col>
                           ))
@@ -178,28 +179,31 @@ function HomemadeProducts() {
                   </Row>
 
                   <hr />
-
-                  <Row gutter={12}>
-                    <Col span={24}>
-                      <Card
-                        className="shoppingCartBox"
-                        bordered={false}>
-                        <div className="totalAmount">
-                          <div className="totalQ">
-                            <p> <strong> Sub-total : </strong> </p>
-                            <span> {totalQuantity} items</span>
+                  {allCart.length ? (
+                    <Row gutter={12}>
+                      <Col span={24}>
+                        <Card
+                          className="shoppingCartBox"
+                          bordered={false}>
+                          <div className="totalAmount">
+                            <div className="totalQ">
+                              <p> <strong> Sub-total : </strong> </p>
+                              <span> {totalQuantity} items</span>
+                            </div>
+                            <div className="totalP">
+                              <h2> ₹&nbsp;{totalPrice}/-</h2>
+                            </div>
                           </div>
-                          <div className="totalP">
-                            <h2> ₹&nbsp;{totalPrice}/-</h2>
-                          </div>
-                        </div>
-                      </Card>
-                    </Col>
+                        </Card>
+                      </Col>
 
-                    <Col span={24}>
-                      <Button className="checkItOut" onClick={() => checkouthandler(totalPrice)}> CHECKOUT </Button>
-                    </Col>
-                  </Row>
+                      <Col span={24}>
+                        <Button className="checkItOut" onClick={() => checkouthandler(totalPrice)}> CHECKOUT </Button>
+                      </Col>
+                    </Row>
+                  ) : <div className="emptyCartBox"> <img src={process.env.PUBLIC_URL + '/emptyCart.png'} alt='logo' /></div>
+                  }
+
                   <h4></h4>
                 </div>
 

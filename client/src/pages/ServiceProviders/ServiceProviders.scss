@@ -58,16 +58,51 @@ $layoutOrangeColor : #FF5300;
                     text-align: center;
                 }
 
-                .cardDetail {
-                    img {
-                        padding: 5px 10px;
+                .providerCard {
+                    width: 20%;
+
+                    .cardDetail {
+                        margin-bottom: 0.5rem;
+
+                        img {
+                            padding: 5px 10px;
+                        }
+
+                        .chatBtn {
+                            width: 100%;
+                            display: block;
+                            text-align: center;
+                            border-radius: 5px;
+                            padding: 5px;
+                            border: 1px solid #1677ff;
+                        }
                     }
                 }
+
 
             }
 
 
         }
 
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .serviceProviders .mainServiceProvidersContentArea .serviceProvidersContainer .tabContainer {
+        .ant-tabs-left>.ant-tabs-content-holder>.ant-tabs-content>.ant-tabs-tabpane {
+            padding: 6px 12px !important;
+        }
+
+        .providerCard {
+            width: 100%
+        }
+    }
+}
+
+@media (min-width: 601px) and (max-width: 768px) {
+
+    .serviceProviders .mainServiceProvidersContentArea .serviceProvidersContainer .tabContainer .providerCard {
+        width: 30%
     }
 }

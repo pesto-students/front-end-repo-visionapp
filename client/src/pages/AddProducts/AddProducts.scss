@@ -111,3 +111,17 @@ $layoutOrangeColor : #FF5300;
 
     }
 }
+
+@media only screen and (max-width: 600px) {
+    .addProducts .mainAddProductsContentArea .addProductsContainer .addProductsFormArea {
+        display: flex;
+        flex-wrap: wrap;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .addProducts .mainAddProductsContentArea .addProductsContainer .addProductsFormArea {
+        display: flex;
+        flex-wrap: wrap;
+    }
+}

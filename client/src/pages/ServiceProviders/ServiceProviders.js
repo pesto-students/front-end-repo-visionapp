@@ -74,7 +74,7 @@ function ServiceProviders() {
                           {
                             // providerData?.providers?.data?.allProvidersDetails.map((el, index) => (
                             tutorList.map((el, index) => (
-                              <Col span={4}>
+                              <Col className="providerCard">
                                 <Card
                                   bordered={false}
                                   className="cardDetail"
@@ -89,9 +89,9 @@ function ServiceProviders() {
                                     title={el.providerName}
                                     description={el.providerServiceType}
                                   />
-                                  <h5> Location :- <b>{el.providerLocation}. </b></h5>
+                                  <h5> Location : <b>{el.providerLocation}. </b></h5>
                                   {/* <Button type="primary" onClick={() => setOpen(true)}> View Detail</Button> */}
-                                  <a href={`https://wa.me/91${el.providerNumber}`} > CHAT</a>
+                                  <a className="chatBtn" href={`https://wa.me/91${el.providerNumber}`} > CHAT</a>
                                 </Card>
                               </Col>
                             ))

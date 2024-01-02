@@ -111,3 +111,17 @@ $layoutOrangeColor : #FF5300;
 
     }
 }
+
+@media only screen and (max-width: 600px) {
+    .addServiceProviders .mainAddServiceProvidersContentArea .addServiceProvidersContainer .addProviderFormArea {
+        display: flex;
+        flex-wrap: wrap;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .addServiceProviders .mainAddServiceProvidersContentArea .addServiceProvidersContainer .addProviderFormArea {
+        display: flex;
+        flex-wrap: wrap;
+    }
+}

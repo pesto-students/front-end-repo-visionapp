@@ -107,6 +107,7 @@ function AddProducts() {
       editTable: true,
       fixed: 'top',
       width: 150,
+
     },
     {
       title: "Price",
@@ -114,6 +115,11 @@ function AddProducts() {
       editTable: true,
       fixed: 'top',
       width: 150,
+      render: (_, record) => {
+        return modifiedData.length >= 1 ? (
+          <label>₹ {record.productPrice} </label>
+        ) : null;
+      }
     },
     {
       title: "Product Type",

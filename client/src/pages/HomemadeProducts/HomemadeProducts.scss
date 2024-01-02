@@ -38,6 +38,11 @@ $layoutOrangeColor : #FF5300;
                 width: 80%;
                 background-color: #e1e1e221;
 
+                .cartItemBox {
+                    width: 25%;
+                    margin-bottom: 0.5rem;
+                }
+
                 .ant-tabs-nav-list {
                     padding: 10px !important;
 
@@ -131,8 +136,74 @@ $layoutOrangeColor : #FF5300;
                         border-color: rgba(0, 128, 0, 0.753);
                     }
                 }
+
+                .emptyCartBox {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    img {
+                        width: 75%;
+                    }
+                }
+
             }
         }
 
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .homemadeProducts .mainHomemadeProductsContentArea .homemadeProductsContainer .leftContainer {
+        width: 100%;
+
+        .cartItemBox {
+            width: 100%;
+        }
+
+        .ant-tabs-left>.ant-tabs-content-holder>.ant-tabs-content>.ant-tabs-tabpane {
+            padding: 6px 12px !important;
+        }
+    }
+
+    .homemadeProducts .mainHomemadeProductsContentArea .homemadeProductsContainer .rightContainer {
+        width: 100%;
+    }
+}
+
+//   /* Medium devices (landscape tablets, 768px and up) */
+@media (min-width: 601px) and (max-width: 768px) {
+    .homemadeProducts .mainHomemadeProductsContentArea .homemadeProductsContainer .leftContainer {
+        width: 70%;
+
+        .cartItemBox {
+            width: 49%;
+        }
+
+        .ant-tabs-left>.ant-tabs-content-holder>.ant-tabs-content>.ant-tabs-tabpane {
+            padding: 6px 12px !important;
+        }
+    }
+
+    .homemadeProducts .mainHomemadeProductsContentArea .homemadeProductsContainer .rightContainer {
+        width: 30%;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1066px) {
+    .homemadeProducts .mainHomemadeProductsContentArea .homemadeProductsContainer .leftContainer {
+        width: 70%;
+
+        .cartItemBox {
+            width: 30%;
+        }
+
+        .ant-tabs-left>.ant-tabs-content-holder>.ant-tabs-content>.ant-tabs-tabpane {
+            padding: 6px 12px !important;
+        }
+    }
+
+    .homemadeProducts .mainHomemadeProductsContentArea .homemadeProductsContainer .rightContainer {
+        width: 30%;
     }
 }
