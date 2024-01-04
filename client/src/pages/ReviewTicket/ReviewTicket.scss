@@ -1,0 +1,77 @@
+$layoutBgColor : #EFE1C7;
+$layoutButtonBgColor : #000000;
+$layoutWhiteColor : #FFFFFF;
+$layoutOrangeColor : #FF5300;
+
+.reviewTicket {
+    width: 90%;
+    margin: 0% auto;
+
+    .breadcrumBg {
+        padding: 5px 10px;
+        background-color: white;
+        border: 1px solid #f0f0f0;
+        border-radius: 5px;
+        margin-bottom: 0.5rem;
+    }
+
+    .mainReviewTicketContentArea {
+
+        h2 {
+            margin-bottom: 0.5rem;
+            margin-top: 0rem;
+        }
+
+        .reviewTicketContainer {
+            .colWidth {
+                width: 100%;
+                margin-bottom: 0.5rem;
+                display: flex;
+                justify-content: center;
+            }
+
+            .insideColumn {
+                display: flex;
+                align-items: center;
+                background-color: white;
+                border-radius: 5px;
+                padding: 5px 10px;
+                box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 2.6px;
+
+                .profileImg {
+                    text-align: center;
+                    padding: 5px;
+                    width: 200px;
+
+                    img {
+                        width: 50px;
+                    }
+
+                    h2 {
+                        margin: 0;
+                    }
+                }
+
+                .profileMsg {
+                    padding: 5px;
+                    display: flex;
+                    flex-direction: column;
+
+                    p {
+                        text-align: left;
+                        margin-top: 0;
+                    }
+
+                    .chatBtn {
+                        width: 100%;
+                        text-align: center;
+                        border-radius: 5px;
+                        padding: 5px;
+                        border: 1px solid #1677ff;
+                    }
+                }
+            }
+        }
+
+    }
+}
